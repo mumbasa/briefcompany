@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>Calendar</title>
+</head>
+<body>
+
+	<div class="content-box" layout:fragment="content">
+		<div class="element-wrapper">
+			<h6 class="element-header">Choose Dates</h6>
+			<div class="element-box">
+
+  <div id="fullCalendar"></div>
+		
+		
+		<form method="post" id="theForm" th:action="@{/admin/get/visit/}">
+		<input type="hidden" id="from" name="from" value="John">
+		<input type="hidden" id="to" name="to" value="2pm">
+		</form>
+		
+		
+			</div>
+		</div>
+
+
+	</div>
+
+</body>
+</html>

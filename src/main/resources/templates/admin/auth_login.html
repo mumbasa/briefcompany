@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Briefta® Reception Login </title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="Admin dashboard html template" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link th:href="@{/favicon.png}" rel="shortcut icon">
+    <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet" type="text/css">
+    <link th:href="@{/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet">
+ 
+    <link th:href="@{/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+  </head>
+  <body class="auth-wrapper">
+    <div class="all-wrapper menu-side with-pattern">
+      <div class="auth-box-w">
+        <div class="logo-w">
+          <img alt="" th:src="@{/img/bird.png}" style="width: 80%;">
+        </div>
+        <h5 class="auth-header ">
+          <span th:text="${company}" class="text-center"></span> LOGIN 
+        </h5>
+        <form th:action="@{/login}" method="post">
+          <div class="form-group">
+            <label for="">Username</label><input class="form-control" placeholder="Enter your username" type="text" name="email">
+            <div class="pre-icon os-icon os-icon-user-male-circle"></div>
+          </div>
+          <div class="form-group">
+            <label for="">Password</label><input class="form-control" placeholder="Enter your password" type="password" name="password">
+            <div class="pre-icon os-icon os-icon-fingerprint"></div>
+          </div>
+          <div class="buttons-w">
+            <button class="btn btn-primary">Log me in</button>
+            <div class="form-check-inline">
+              <label class="form-check-label"><input class="form-check-input" type="checkbox">Remember Me</label>
+            </div>
+                
+          
+          </div>
+            <p class="text-center mt-5 text-info"> Powered by </p>
+					<div class="text-center">
+						<img th:src="@{/img/surline.png}" style="width: 40%">
+					</div>
+        </form>
+      </div>
+       
+    </div>
+  </body>
+</html>

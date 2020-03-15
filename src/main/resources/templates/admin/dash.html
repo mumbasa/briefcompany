@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+  layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>My Dashboard</title>
+</head>
+<body>
+<div class="content-box" layout:fragment="content" >
+<div th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}">
+     <script type="text/javascript" th:inline="javascript">
+     
+     
+ 	$(document).ready(
+ 			
+function dd(){
+	var datas=[];
+	var labs=[];
+	$.ajax({
+		url:[[@{/admin/get/visit/type/graph}]],
+	
+		type:'get',
+	
+		success:function(data){
+		for( i in data){
+			datas.push(data[i].value);
+			labs.push(data[i].key);
+		}
+		if ($("#donutChart").length) {
+		      var donutChart = $("#donutChart");
+
+		      // donut chart data
+		      var data = {
+		        labels:labs,
+		        datasets: [{
+		          data: datas,
+		          backgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+		          hoverBackgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+		          borderWidth: 0
+		        }]
+		      };
+
+		      // -----------------
+		      // init donut chart
+		      // -----------------
+		      new Chart(donutChart, {
+		        type: 'doughnut',
+		        data: data,
+		        options: {
+		          legend: {
+		            display: false
+		          },
+		          animation: {
+		            animateScale: true
+		          },
+		          cutoutPercentage: 80
+		        }
+		      });
+		    }
+		}
+
+	}); 
+	
+	
+	
+	
+	
+	
+});
+ 
+ 	
+ 	function signOut(id){
+		var catty = [[@{/admin/reception/signout}]]
+		  $.ajax({
+	        	url:catty,
+	        	data:"id="+id,
+	        	type:'get',
+	        	success: function(data){
+	        		toastr.success('Success', 'Visitor Signed Out', {timeOut: 5000});
+
+	        	}
+	        	
+	        });
+	        
+		
+	}
+ 	
+function change(ids){
+		
+				var form = $('#change'+ids);
+				var formdata = false;
+				formdata = new FormData(form[0]);
+				formdata.append('id',ids);
+			 $.ajax({
+						url:[[@{/admin/assign/tag}]],
+						data:formdata,
+						type:'post',
+						processData : false,
+						contentType : false,
+						cache : false,
+						success:function(data){
+						
+				    		toastr.success('Success', 'User Added', {timeOut: 5000});
+
+								 form[0].reset();
+									$('#giveTag'+ids).modal('toggle');
+					    			location.reload();
+
+								
+							
+						}
+						
+					});  
+					  
+				
+			
+			
+				
+			}
+		</script> 
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="element-wrapper">
+                     <h6 class="element-header" id="title" th:data-title="${title}">
+                      Reception Dashboard
+                    </h6>
+                    <div class="element-content">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                              Visitors Today
+                            </div>
+                            <div class="value" th:text="${count}">
+                              57
+                            </div>
+                           
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                              Active Visitors
+                            </div>
+                            <div class="value" th:text="${active}">
+                              $457
+                            </div>
+                           
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">Tags Remaining</div>
+										<div class="value" th:text="${tags}">
+                              125
+                            </div>
+                            
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                              Appointments Today
+                            </div>
+                            <div class="value" th:text="${apps}">
+                              $294
+                            </div>
+                            <div class="trending trending-up-basic">
+                             
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="element-wrapper">
+                    <h6 class="element-header">
+                     Staff Response of  Visits
+                    </h6>
+                    <div class="element-box">
+                      <div class="table-responsive">
+                        <table class="table table-lightborder">
+                          <thead>
+                            <tr>
+                            <th>
+                                Picture
+                              </th>
+                              <th>
+                                Visitor
+                              </th>
+                              <th>
+                                Time In
+                              </th>
+                              <th class="text-center">
+                                Status
+                              </th>
+                              <th class="text-right">
+                                Tag
+                              </th>
+                                <th class="text-right">
+                                
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr th:each="a,i:${acceptVisits}">
+                            <td>
+                                <div class="cell-image-list">
+                                  <img class="cell-img" th:src="${a.picture}">
+                                 
+                                
+                                </div>
+                              </td>
+                              <td class="nowrap" th:text="${a.visitorName}">
+                                John Mayers
+                              </td>
+                              <td  th:text="${a.timeIn}">
+                                
+                              </td>
+                              <td class="text-center">
+                                <div class="status-pill green" data-title="Complete" data-toggle="tooltip" th:if="${a.status=='Accepted'}"></div>
+                             <div class="status-pill red" data-title="Complete" data-toggle="tooltip" th:if="${a.status !='Accepted'}"></div>
+                             
+                              </td>
+                              <td class="text-right"  th:text="${a.tag}">
+                                $354
+                              </td>
+                              <td><button class="btn btn-primary" th:data-target="'#giveTag'+${a.visitId}" data-toggle="modal" th:if="${a.status=='Accepted'}">Give Out Tag</button> 
+                              <button class="btn btn-danger" th:onclick="'signOut('+${a.visitId}+')'" th:if="${a.status !='Accepted'}">Sign out</button> 
+                              
+                                  <div aria-hidden="true" aria-labelledby="mySmallModalLabel" th:id="'giveTag'+${a.visitId}" class="modal fade bd-example-modal-sm" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Assign Visitor New Tag
+            </h5>
+            <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true"> &times;</span></button>
+          </div>
+          <div class="modal-body">
+            <form th:id="'change'+${a.visitId}" >
+              <div class="form-group">
+                <label for=""> Tag Number</label><input class="form-control" placeholder="Enter Tag Number" name="tag" type="text">
+              </div>
+             
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-dismiss="modal" type="button"> Close</button>
+            <button class="btn btn-primary" type="button"  th:onclick="'change('+${a.visitId}+')'"> Approve</button>
+          </div>
+        </div>
+      </div>
+   
+        
+        
+      </div>
+         
+                              
+                              
+                 </td>
+                            </tr>
+                           
+                          </tbody>
+                        </table>
+                      </div>
+                  
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <!--START - Top Selling Chart-->
+                  <div class="element-wrapper">
+                    <h6 class="element-header">
+                     Visits Today
+                    </h6>
+                    <div class="element-box">
+                      <div class="el-chart-w">
+                        <canvas height="120" id="donutChart" width="120"></canvas>
+                        <div class="inside-donut-chart-label">
+                          <strong th:text="${count}">142</strong><span>Total Visits</span>
+                        </div>
+                      </div>
+                      <div class="el-legend condensed">
+                    
+                        <h6><p  class="text-center">Visits By Type</p></h6>
+                        </div>
+                      
+                    </div>
+                  </div>
+                  <!--END - Top Selling Chart-->
+                </div>
+               </div>
+              </div>
+
+<div th:if="${#authorization.expression('hasAuthority(''Administrator'')')}">
+     <script type="text/javascript" th:inline="javascript">
+     
+     
+ 	$(document).ready(
+ 		
+function dd(){
+	var datas=[];
+	var labs=[];
+	$.ajax({
+		url:[[@{/admin/get/visit/type/graph}]],
+	
+		type:'get',
+	
+		success:function(data){
+			piechart();
+		for( i in data){
+			datas.push(data[i].value);
+			labs.push(data[i].key);
+		}
+		if ($("#donutChart").length) {
+		      var donutChart = $("#donutChart");
+
+		      // donut chart data
+		      var data = {
+		        labels:labs,
+		        datasets: [{
+		          data: datas,
+		          backgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+		          hoverBackgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+		          borderWidth: 0
+		        }]
+		      };
+
+		      // -----------------
+		      // init donut chart
+		      // -----------------
+		      new Chart(donutChart, {
+		        type: 'doughnut',
+		        data: data,
+		        options: {
+		          legend: {
+		            display: false
+		          },
+		          animation: {
+		            animateScale: true
+		          },
+		          cutoutPercentage: 80
+		        }
+		      });
+		    }
+		}
+
+	}); 
+	
+	
+	
+	
+	
+	
+});
+ 
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	function signOut(id){
+		var catty = [[@{/admin/reception/signout}]]
+		  $.ajax({
+	        	url:catty,
+	        	data:"id="+id,
+	        	type:'get',
+	        	success: function(data){
+	        		toastr.success('Success', 'Visitor Signed Out', {timeOut: 5000});
+
+	        	}
+	        	
+	        });
+	        
+		
+	}
+ 	
+			function change(ids){
+		
+				var form = $('#change'+ids);
+				var formdata = false;
+				formdata = new FormData(form[0]);
+				formdata.append('id',ids);
+			 $.ajax({
+						url:[[@{/admin/assign/tag}]],
+						data:formdata,
+						type:'post',
+						processData : false,
+						contentType : false,
+						cache : false,
+						success:function(data){
+						
+				    		toastr.success('Success', 'User Added', {timeOut: 5000});
+
+								 form[0].reset();
+									$('#giveTag'+ids).modal('toggle');
+								
+							
+						}
+						
+					});  
+					  
+				
+			
+			
+				
+			}
+			
+			
+			
+		</script> 
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="element-wrapper">
+                     <h6 class="element-header" id="title" th:data-title="${title}">
+                      Admin Dashboard
+                    </h6>
+                    <div class="element-content">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                              Visitors Today
+                            </div>
+                            <div class="value" th:text="${count}">
+                              57
+                            </div>
+                           
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                              Active Visitors
+                            </div>
+                            <div class="value" th:text="${active}">
+                              $457
+                            </div>
+                           
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                             Total Visits
+                            </div>
+                            <div class="value" th:text="${visits}">
+                              125
+                            </div>
+                            
+                          </a>
+                        </div>
+                        <div class="col-sm-3">
+                          <a class="element-box el-tablo" >
+                            <div class="label">
+                            Unique Visitors
+                            </div>
+                            <div class="value" th:text="${distinctVisitors}">
+                              $294
+                            </div>
+                            <div class="trending trending-up-basic">
+                             
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="element-wrapper">
+                    <h6 class="element-header">
+                     Staff Response of  Visits
+                    </h6>
+               
+                  <table class="table table-lightborder " id="dataTable1">
+        <thead>
+          <tr>
+           <th class="text-right">
+              #
+            </th>
+            <th>
+              Staff Name
+            </th>
+            <th>
+              Department
+            </th>
+            <th>
+              Position
+            </th>
+            <th class="text-center">
+              Visit Count
+            </th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="a,i:${staffVisitorCount}">
+          <td class="text-right" th:text="${i.index+1}">
+              $354
+            </td>
+            <td th:text="${a.object.lastName +' ' +a.object.firstname}">
+              John Mayers
+            </td>
+            <td th:text="${a.object.dept}">
+              12
+            </td>
+            <td th:text="${a.object.position}">
+              <img alt="" src="img/flags-icons/us.png" width="25px">
+            </td>
+            <td class="text-center" th:text="${a.value}">
+              <div class="status-pill green" data-title="Complete" data-toggle="tooltip"></div>
+            </td>
+            
+          </tr>
+ 
+        </tbody>
+      </table>
+                  
+                      
+                   </div>
+                   
+                            <!--START - Chart Box-->
+                             <!--END - Chart Box-->
+                     
+                   
+                   
+                   
+                   
+                   
+                   
+                </div>
+                <div class="col-sm-4">
+                  <!--START - Top Selling Chart-->
+                  <div class="col-sm-12">
+                  <div class="element-wrapper">
+                    <h6 class="element-header">
+                     Visits Today
+                    </h6>
+                    <div class="element-box">
+                      <div class="el-chart-w">
+                        <canvas height="120" id="donutChart" width="120"></canvas>
+                        <div class="inside-donut-chart-label">
+                          <strong th:text="${count}">142</strong><span>Total Visits</span>
+                        </div>
+                      </div>
+                      <div class="el-legend condensed">
+                    
+                        <h6><p class="text-center">Visits By Type</p></h6>
+                        </div>
+                      
+                    </div>
+                  </div>
+                  </div>
+                  <!--END - Top Selling Chart-->
+                 <div class="col-sm-12">
+                 
+                 
+                 
+                 
+                 </div>
+                </div>
+                
+                  </div>
+           <div class="row">
+            
+               <div class="col-sm-8">
+                <div class="element-wrapper">
+                      <h6 class="element-header">
+                     Year's Visits 
+                    </h6>
+                      
+                           <div class="element-box pl-xxl-5 pr-xxl-5">
+                              <div class="el-tablo bigger highlight bold-label">
+                                <div class="value" th:text="${yearVisit}">
+                                  12,537
+                                </div>
+                                <div class="label">
+                                   Visits
+                                </div>
+                              </div>
+                              <div class="el-chart-w mt-2">
+                                <canvas height="270px" id="lineChart2" width="600px"></canvas>
+                              </div>
+                            </div>
+           
+           
+           
+           </div>
+           
+           </div>
+         
+        <div class="col-sm-4">
+                  <div class="element-wrapper">
+                    <h6 class="element-header">
+                      System Stats
+                    </h6>
+                    <div class="element-box el-tablo">
+                      <div class="label">
+                        Total Staff Usage
+                      </div>
+                      <div class="value" th:text="${staff}">
+                        574
+                      </div>
+                      <div class="trending">
+                        <span th:text="${(staff*100)/(totalStaff==0?1:totalStaff)}">%</span><span>%</span>
+                      </div>
+                    </div>
+                    <div class="element-box el-tablo">
+                      <div class="label">
+                        Departments
+                      </div>
+                      <div class="value" th:text="${departments}">
+                        12
+                      </div>
+                      <div class="trending trending-down-basic">
+                       
+                      </div>
+                    </div>
+                    <div class="element-box el-tablo">
+                      <div class="label">
+                        Acceptance Rate
+                      </div>
+                      <div class="value" th:text="${visitAcceptance}">
+                        $2,507
+                      </div>
+                      <div class="trending trending-down-basic">
+                        <span th:text="${(visitAcceptance*100/(visits==0?1:visits))}">12</span><span>%</span>
+                      </div>
+                    </div>
+                    
+                      <div class="element-box el-tablo">
+                      <div class="label">
+                        Appointment Accepted
+                      </div>
+                      <div class="value" th:text="${appointmentAcceptance}">
+                        $2,507
+                      </div>
+                      <div class="trending trending-down-basic">
+                        <span th:text="${appointmentAcceptance*100/(appointments==0?1:appointments)}">12</span><span>%</span>
+                      </div>
+                    </div>
+                  </div>
+         
+         
+         
+         
+         
+         </div>
+         
+         
+         
+         </div>
+         
+           </div>
+               </div>
+
+
+         
+</body>
+</html>

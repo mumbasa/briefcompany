@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Briefta® Admin User Set up </title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="Admin dashboard html template" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link th:href="@{/favicon.png}" rel="shortcut icon">
+    <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet" type="text/css">
+    <link th:href="@{/bower_components/select2/dist/css/select2.min.css}" rel="stylesheet">
+      <link th:href="@{/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+  </head>
+  <body class="auth-wrapper">
+    <div class="all-wrapper menu-side with-pattern">
+      <div class="auth-box-w">
+        <div class="logo-w">
+          <img alt="" th:src="@{/img/bird.png}" style="width: 100%;">
+        </div>
+        <h4 class="auth-header ">
+          SUPER USER SIGN UP
+        </h4>
+        <form th:action="@{/add/superuser}" method="post">
+         <div class="form-group">
+            <label for="">Name</label><input class="form-control" placeholder="Enter name" type="text" name="name">
+            <div class="pre-icon os-icon os-icon-user"></div>
+          </div>
+        
+          <div class="form-group">
+            <label for=""> Email address</label><input class="form-control" placeholder="Enter email" type="email" name="email">
+            <div class="pre-icon os-icon os-icon-email-2-at2"></div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for=""> Password</label><input class="form-control" placeholder="Password" type="password" name="pass">
+                <div class="pre-icon os-icon os-icon-fingerprint"></div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Confirm Password</label><input class="form-control" placeholder="Password" type="password">
+              </div>
+            </div>
+          </div>
+          <div class="buttons-w">
+            <button class="btn btn-primary">Register Now</button>
+          </div>
+        </form>
+     
+      </div>
+    </div>
+  </body>
+</html>

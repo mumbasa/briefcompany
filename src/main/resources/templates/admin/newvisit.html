@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>New Visit</title>
+
+</head>
+<body>
+
+	<div class="content-box" layout:fragment="content">
+		<script th:src="@{/webcam/webcam.min.js}"></script>
+
+		<script type="text/javascript" th:inline="javascript">
+		 var raw_image_data ;
+			function take_snapshot() {
+				// take snapshot and get image data
+				Webcam
+						.snap(function(data_uri) {
+							// display results in page
+							document.getElementById('cover').innerHTML = '<img id="imgs" src="'+data_uri+'"/>';
+					         raw_image_data = dataURItoBlob(data_uri, 'image/jpg');
+					      
+						});
+			}
+
+			$(document).ready(function() {
+				
+				$('#tel').blur(function(){
+					
+					$.ajax({
+						url:[[@{/api/get/visitor/}]]+$(this).val(),
+						
+						type:'get',
+						success:function(data){
+						$('#name').val(data.name);
+						$('#comp').val(data.company);
+				    		toastr.success(data.name ,'Welcome Back',  {timeOut: 5000});
+							
+								
+							
+						}
+						
+					}); 
+					
+					});
+				
+				
+				Webcam.set({
+					width : 400,
+					height : 280,
+					image_format : 'jpeg',
+					jpeg_quality : 90
+				});
+				Webcam.attach('#cam');
+
+			});
+			
+			
+			function dataURItoBlob(dataURI, type) {
+			    // convert base64 to raw binary data held in a string
+			    var byteString = atob(dataURI.split(',')[1]);
+
+			    // separate out the mime component
+			    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+			    // write the bytes of the string to an ArrayBuffer
+			    var ab = new ArrayBuffer(byteString.length);
+			    var ia = new Uint8Array(ab);
+			    for (var i = 0; i < byteString.length; i++) {
+			        ia[i] = byteString.charCodeAt(i);
+			    }
+
+			    // write the ArrayBuffer to a blob, and you're done
+			    var bb = new Blob([ab], { type: type });
+			    return bb;
+			}
+
+			function sele(){
+				
+				var form = $('#newvist');
+				var formdata = false;
+				formdata = new FormData(form[0]);
+				formdata.append('file', raw_image_data);
+					 var site =[[@{/admin/dashboard}]];
+					$.ajax({
+						url:[[@{/api/add/visit}]],
+						data:formdata,
+						type:'post',
+						processData : false,
+						contentType : false,
+						cache : false,
+						success:function(data){
+						
+				    		toastr.success('Success', 'Host Alerted of the Visit', {timeOut: 5000});
+
+								 form[0].reset();
+								 document.getElementById('cover').innerHTML = 
+										'<img id="imgs" src=""/>';
+						    	//	$("#newvist").load(location.href + " #newvist");	
+						    		// Simulate an HTTP redirect:
+						    		window.location.replace(site);
+							
+						}
+						
+					}); 
+					  
+				
+			
+			
+				
+			}
+			
+
+		</script>
+		<div class="element-wrapper">
+			<h6 class="element-header" id="title" th:data-title="${title}">New Visitor</h6>
+			<div class="element-box">
+
+				<form id="newvist">
+					<div class="steps-w">
+						<div class="step-triggers">
+							<a class="step-trigger active" href="#stepContent1">Personal Details</a><a class="step-trigger" href="#stepContent2">Take A Photograph</a><a
+								class="step-trigger" href="#stepContent3">Choose Host</a>
+						</div>
+						<div class="step-contents">
+							<div class="step-content active" id="stepContent1">
+							<label class="form-group">Type of Visit</label> 
+							<div class="form-group">
+							
+							<div class="form-check form-check-inline">
+ <input class="form-check-input" type="radio" name="mission" id="inlineRadio1" value="official" checked="checked">
+  <label class="form-check-label" for="inlineRadio1">Official</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="mission" id="inlineRadio2" value="personal">
+  <label class="form-check-label" for="inlineRadio2">Personal</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="mission" id="inlineRadio3" value="others" disabled>
+  <label class="form-check-label" for="inlineRadio3">Other</label>
+</div>
+							</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="">Telephone Number</label> <input id="tel"
+												class="form-control" placeholder="Contact Number" type="text" name="contact">
+
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="">Name</label><input class="form-control" name="name" id="name"
+												placeholder="Name" type="text">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for=""> Company</label><input class="form-control" id="comp"
+												placeholder="Company" type="text" name="company">
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="">Car Number</label><input class="form-control"
+												placeholder="Car number" type="text" name="car">
+																						</div>
+									</div>
+								</div>
+								<div class="form-buttons-w text-right">
+									<a class="btn btn-primary step-trigger-btn"
+										href="#stepContent2"> Continue</a>
+								</div>
+							</div>
+							<div class="step-content" id="stepContent2">
+
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<div id="cam"></div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+
+										<div class="form-group">
+
+											<div id="cover"></div>
+											<input class="form-control" style="display: none;" id="pic"
+												placeholder="Car number" type="file">
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group col text-center ">
+											<button type="button" class="btn btn-primary" onclick="take_snapshot()">
+												Take Picture<i class="fas fa-camera"></i>
+											</button>
+										</div>
+									</div>
+									<div class="col-sm-6"></div>
+								</div>
+								<div class="form-buttons-w text-right">
+									<a class="btn btn-primary step-trigger-btn"
+										href="#stepContent3"> Continue</a>
+								</div>
+							</div>
+							<div class="step-content" id="stepContent3">
+								<div class="form-group">
+									<label for="">Select Staff</label><select name="staff"
+										class="form-control">
+										<option>Select Staff</option>
+										<option th:each="a:${staff}" th:text="${a.firstname+' '+a.lastName + ' ('+a.dept+')'}" th:value="${a.id}">New York</option>
+										
+									</select>
+								</div>
+							
+							<!-- 	<div class="form-group">
+									<label for="">Select Company</label><select
+										class="form-control">
+										<option>Select State</option>
+										<option>New York</option>
+										<option>California</option>
+										<option>Boston</option>
+										<option>Texas</option>
+										<option>Colorado</option>
+									</select>
+								</div> -->
+							
+								<div class="form-buttons-w text-right">
+									<button class="btn btn-primary" type="button" onclick="sele()">Submit Form</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+
+	</div>
+
+</body>
+</html>

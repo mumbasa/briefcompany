@@ -1,0 +1,1182 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title>Briefta Reception</title>
+<meta charset="utf-8">
+<meta content="ie=edge" http-equiv="x-ua-compatible">
+<meta content="template language" name="keywords">
+<meta content="Tamerlan Soziev" name="author">
+<meta content="Admin dashboard html template" name="description">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<link th:href="@{/img/favicon.png}" rel="shortcut icon">
+<link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon">
+<link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500"
+	rel="stylesheet" type="text/css">
+<link th:href="@{/bower_components/select2/dist/css/select2.min.css}"
+	rel="stylesheet">
+<link th:href="@{/bower_components/datatables.net/datatables.min.css}"
+	rel="stylesheet">
+<link th:href="@{/bower_components/toast/toastr.min.css}"
+	rel="stylesheet">
+<link
+	th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}"
+	rel="stylesheet">
+
+<link
+	th:href="@{/bower_components/fullcalendar/dist/fullcalendar.min.css}"
+	rel="stylesheet">
+<link
+	th:href="@{/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css}"
+	rel="stylesheet">
+<!--   <link th:href="@{/bower_components/slick-carousel/slick/slick.css}" rel="stylesheet"> -->
+<link th:href="@{/css/main.css}" rel="stylesheet">
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+</head>
+<body class="menu-position-top full-screen with-content-panel" th:data-company="${session.companyName}">
+	<div class="all-wrapper with-side-panel solid-bg-all">
+		<div class="layout-w">
+			<!--------------------
+        -------------------->
+			<div
+				class="menu-w color-scheme-light color-style-default menu-position-top menu-layout-compact sub-menu-style-over sub-menu-color-bright selected-menu-color-bright menu-activated-on-hover menu-has-selected-link">
+				<div class="logo-w">
+					<div>
+						<img th:src="@{/img/logo2.png}">
+					</div>
+					<div class="logo-label">Briefta Reception &nbsp -<span sec:authentication="principal.authorities"></span> </div>
+				</div>
+				<h1 class="menu-page-header">Page Header</h1>
+				<ul class="main-menu">
+
+					<li id="dashboard"><a th:href="@{/admin/dashboard}">
+							<div class="icon-w">
+								<div class="os-icon os-icon-layout"></div>
+							</div> <span>Dashboard</span>
+					</a></li>
+					<li class=" has-sub-menu" id="visits"
+						th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}"><a>
+							<div class="icon-w">
+								<div class="os-icon os-icon-layers"></div>
+							</div> <span>Visits</span>
+					</a>
+						<div class="sub-menu-w">
+							<div class="sub-menu-icon">
+								<i class="os-icon os-icon-layers"></i>
+							</div>
+							<div class="sub-menu-i">
+								<ul class="sub-menu">
+									<li><a th:href="@{/admin/new/visit}">New Visit</a></li>
+									<li><a th:href="@{/admin/visits}">Visits</a></li>
+								</ul>
+							</div>
+						</div></li>
+
+					<li class=" has-sub-menu" id="appointments"><a>
+							<div class="icon-w">
+								<div class="os-icon os-icon-package"></div>
+							</div> <span>Appointments</span>
+					</a>
+						<div class="sub-menu-w">
+
+							<div class="sub-menu-icon">
+								<i class="os-icon os-icon-package"></i>
+							</div>
+							<div class="sub-menu-i">
+								<ul class="sub-menu">
+									<li 	th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}"><a data-target=".bd-example-modal-lg"
+										data-toggle="modal">New Appointment</a></li>
+									<li><a th:href="@{/admin/unanswered/appointments}">Acceptance
+											Pending</a></li>
+									<li><a th:href="@{/admin/appointments/repsonse}">Appointments
+											Status</a></li>
+								</ul>
+							</div>
+						</div></li>
+					<li><a th:href="@{/admin/messages}" id="messages"
+						th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}">
+							<div class="icon-w">
+								<div class="os-icon os-icon-file-text"></div>
+							</div> <span>Messages</span>
+					</a></li>
+					<li class=" has-sub-menu" id="tags"><a>
+							<div class="icon-w">
+								<div class="os-icon os-icon-life-buoy"></div>
+							</div> <span>Tags</span>
+					</a>
+						<div class="sub-menu-w">
+
+							<div class="sub-menu-icon">
+								<i class="os-icon os-icon-life-buoy"></i>
+							</div>
+							<div class="sub-menu-i">
+								<ul class="sub-menu">
+									<li><a data-target="#tagger" data-toggle="modal">Add
+											Tag </a></li>
+									<li><a th:href="@{/admin/tags/report}">Tags</a></li>
+								</ul>
+							</div>
+						</div></li>
+
+					<li class=" has-sub-menu" id="reports" th:if="${#authorization.expression('hasAuthority(''Administrator'')')}"><a>
+							<div class="icon-w">
+								<div class="os-icon os-icon-mail"></div>
+							</div> <span>Reports</span>
+					</a>
+						<div class="sub-menu-w">
+
+							<div class="sub-menu-icon">
+								<i class="os-icon os-icon-mail"></i>
+							</div>
+							<div class="sub-menu-i">
+								<ul class="sub-menu">
+									<li><a th:href="@{/admin/calendar}">Days Report</a></li>
+									<li><a th:href="@{/admin/staff/report}">Staff Report</a></li>
+										<li><a th:href="@{/admin/visitors/report}">Visitors Report</a></li>
+								</ul>
+							</div>
+						</div></li>
+
+
+					<li class="has-sub-menu" id="staff"><a>
+							<div class="icon-w">
+								<div class="os-icon os-icon-mail"></div>
+							</div> <span>Staff</span>
+					</a>
+						<div class="sub-menu-w">
+
+							<div class="sub-menu-icon">
+								<i class="os-icon os-icon-mail"></i>
+							</div>
+							<div class="sub-menu-i">
+								<ul class="sub-menu">
+									<li
+										th:if="${#authorization.expression('hasAuthority(''Administrator'')')}"><a
+										th:href="@{/admin/add/staff}">Add Staff</a></li>
+											<li
+										th:if="${#authorization.expression('hasAuthority(''Administrator'')')}"><a
+										th:href="@{/admin/add/staff/batch}">Add Staff Batch Data</a></li>
+									<li><a th:href="@{/admin/staff}">Staff Directory</a></li>
+								</ul>
+							</div>
+						</div></li>
+
+
+				</ul>
+		<div class="logo-label text-info"> Powered by &nbsp</div>
+					<div>
+						<img th:src="@{/img/surline.png}" style="width: 60%">
+					</div>
+				
+			
+			</div>
+			<!--------------------
+        END - Main Menu
+        -------------------->
+			<div class="content-w">
+				<!--------------------
+          START - Top Bar
+          -------------------->
+				<div class="top-bar color-scheme-transparent">
+					<!--------------------
+            START - Top Menu Controls
+            -------------------->
+					<div class="top-menu-controls">
+
+						<!--------------------
+              START - Messages Link in secondary top menu
+              -------------------->
+						<div th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}"
+							class="messages-notifications os-dropdown-trigger os-dropdown-position-left">
+							<i class="os-icon os-icon-mail-14"></i>
+							<div class="new-messages-count" id="msgcount">3</div>
+							<div class="os-dropdown dark message-list" id="redismg">
+								<!-- <ul > -->
+<!-- <li><a ><div class="message-content"><p class="message-from">Accept</p><h6 class="message-title">Bryan Laryea</h6></div></a></li> -->
+								<!-- </ul> -->
+							</div>
+						</div>
+
+						<!--------------------
+              END - Messages Link in secondary top menu
+              -------------------->
+						<!--------------------
+              START - Settings Link in secondary top menu
+              -------------------->
+						<div
+							th:if="${#authorization.expression('hasAuthority(''Administrator'')')}"
+							class="top-icon top-settings os-dropdown-trigger os-dropdown-position-left">
+							<i class="os-icon os-icon-ui-46"></i>
+							<div class="os-dropdown">
+								<div class="icon-w">
+									<i class="os-icon os-icon-ui-46"></i>
+								</div>
+								<ul>
+									<li><a th:href="@{/admin/departments}"><i
+											class="os-icon os-icon-ui-49"></i><span>Department
+												Settings</span></a></li>
+									<li><a th:href="@{/admin/users}"><i
+											class="os-icon os-icon-grid-10"></i><span>User
+												Settings</span></a></li>
+								</ul>
+							</div>
+						</div>
+						<!--------------------
+              END - Settings Link in secondary top menu
+              -------------------->
+						<!--------------------
+              START - User avatar and menu in secondary top menu
+              -------------------->
+						<div class="logged-user-w">
+							<div class="logged-user-i">
+								<div class="avatar-w">
+									<h4>
+										<i class="os-icon os-icon-user"></i>
+									</h4>
+								</div>
+								<div class="logged-user-menu color-style-bright">
+									<div class="logged-user-avatar-info">
+										<div class="avatar-w">
+											<i class="os-icon os-icon-user"></i>
+										</div>
+										<div class="logged-user-info-w">
+											<div class="logged-user-name" sec:authentication="name">
+												Maria Gomez</div>
+											<div class="logged-user-role"
+												sec:authentication="principal.authorities">
+												Administrator</div>
+										</div>
+									</div>
+									<div class="bg-icon">
+										<i class="os-icon os-icon-wallet-loaded"></i>
+									</div>
+									<ul>
+
+										<li><a data-target="#changePassword" data-toggle="modal"><i
+												class="os-icon os-icon-user-male-circle2"></i><span>Change
+													Password</span></a></li>
+										<li><a th:href="@{/admin/messages}"><i
+												class="os-icon os-icon-others-43"></i><span>Notifications</span></a>
+										</li>
+										<li><a th:href="@{/logout}"><i
+												class="os-icon os-icon-signs-11"></i><span>Logout</span></a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!--------------------
+              END - User avatar and menu in secondary top menu
+              -------------------->
+					</div>
+					<!--------------------
+            END - Top Menu Controls
+            -------------------->
+				</div>
+				<!--------------------
+          END - Top Bar
+          -------------------->
+				<div class="content-panel-toggler">
+					<i class="os-icon os-icon-grid-squares-22"></i><span></span>
+				</div>
+				<div class="content-i">
+
+					<div layout:fragment="content"></div>
+
+					<!--------------------
+            START - Sidebar
+            -------------------->
+					<div class="content-panel">
+						<div class="content-panel-close">
+							<i class="os-icon os-icon-close"></i>
+						</div>
+
+						<!--------------------
+              START - Support Agents
+              -------------------->
+						<div
+							th:if="${#authorization.expression('hasAuthority(''Administrator'')')}">
+							<div class="alert alert-warning alert-dismissible fade show"
+								role="alert" th:if="${deptCount ==0}">
+								<button aria-label="Close" class="close" data-dismiss="alert"
+									type="button">
+									<span aria-hidden="true"> &times;</span>
+								</button>
+								<strong>Set up not completed </strong><BR>You should add
+								departments to have a functioning system.
+							</div>
+							<div class="alert alert-warning alert-dismissible fade show"
+								role="alert" th:if="${staffCount==0}">
+								<button aria-label="Close" class="close" data-dismiss="alert"
+									type="button">
+									<span aria-hidden="true"> &times;</span>
+								</button>
+								<strong>Set up not completed </strong><BR>You should add
+								staff to hav<!-- </ul> -->e a functioning system.
+							</div>
+							<div class="alert alert-warning alert-dismissible fade show"
+								role="alert" th:if="${receptionCount==0}">
+								<button aria-label="Close" class="close" data-dismiss="alert"
+									type="button">
+									<span aria-hidden="true"> &times;</span>
+								</button>
+								<strong>Set up not completed </strong><BR>You should add
+								receptionist account to have a functioning system.
+							</div>
+
+
+							<div class="element-wrapper">
+								<h6 class="element-header">Visitors By Department</h6>
+								<div class="el-chart-w">
+									<canvas height="150px" id="pieChart2" width="150px"></canvas>
+								</div>
+							</div>
+
+
+
+							<div class="element-wrapper pb-3">
+								<h6 class="element-header">Visitors By Year</h6>
+
+
+
+								<div class="el-chart-w">
+									<canvas height="250" id="barChart2" width="300"></canvas>
+								</div>
+
+
+
+								<!--------------------
+              END - Support Agents
+              -------------------->
+								<!--------------------
+              START - Recent Activity
+              -------------------->
+								<!--------------------
+              END - Recent Activity
+              -------------------->
+								<!--------------------
+              START - Team Members
+              -------------------->
+								<!--------------------
+              END - Team Members
+              -------------------->
+							</div>
+
+
+							<div class="element-wrapper pt-3">
+								<h6 class="element-header">Visits by Type</h6>
+								<div>
+
+									<div class="el-chart-w">
+										<canvas height="160" id="donutChart3" width="160"></canvas>
+										<div class="inside-donut-chart-label">
+											<strong th:text="${visits}">142</strong><span>Visits</span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+
+
+						</div>
+						<div class="element-wrapper"
+							th:if="${#authorization.expression('hasAuthority(''Receptionist'')')}">
+							<h6 class="element-header">Visitors Waiting</h6>
+							<div class="element-box-tp" id="tip"></div>
+						</div>
+
+
+						<!--------------------
+            END - Sidebar
+            -------------------->
+					</div>
+				</div>
+
+
+				<div aria-hidden="true" id="appointment"
+					aria-labelledby="myLargeModalLabel"
+					class="modal fade bd-example-modal-lg" role="dialog" tabindex="-1">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">New
+									Appointment Form</h5>
+								<button aria-label="Close" class="close" data-dismiss="modal"
+									type="button">
+									<span aria-hidden="true"> &times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="former">
+
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="">Contact Number</label><input
+													class="form-control" placeholder="Contact Number"
+													type="text" name="contact" id="vtel">
+											</div>
+										</div>
+
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for=""> Name</label><input class="form-control"
+													placeholder="Name" name="name" type="text" id="name">
+											</div>
+										</div>
+
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for=""> Email</label><input class="form-control"
+													placeholder="email" name="email" type="email">
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for=""> company</label><input class="form-control"
+													placeholder="Company" name="company" type="text"
+													id="company">
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="">Staff</label><select class="form-control"
+											name="staff" id="staffer">
+											<option>Select Staff</option>
+
+										</select>
+									</div>
+									<div class="form-group">
+										<label for=""> Title</label><input class="form-control"
+											name="title" type="text">
+									</div>
+									<div class="form-group">
+										<label for=""> Reason</label>
+										<textarea class="form-control" name="reason"></textarea>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-secondary" data-dismiss="modal"
+									type="button">Close</button>
+								<button class="btn btn-primary" type="button"
+									onclick="newAppointmtnet()">Book Appointment</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+				<div aria-hidden="true" aria-labelledby="mySmallModalLabel2"
+					id="changePassword" class="modal fade bd-example-modal-sm"
+					role="dialog" tabindex="-1">
+					<div class="modal-dialog modal-md">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Change
+									Password</h5>
+							</div>
+							<div class="modal-body">
+								<form id="change">
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for=""> Password</label><input class="form-control"
+													placeholder="Password" type="password" name="password">
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="">Confirm Password</label><input
+													class="form-control" placeholder="Password" type="password">
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-secondary" data-dismiss="modal"
+									type="button">Close</button>
+								<button class="btn btn-success" type="button"
+									onclick="changePassword()">Change Password</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div aria-hidden="true" aria-labelledby="mySmallModalLabel"
+					id="tagger" class="modal fade bd-example-modal-sm" role="dialog"
+					tabindex="-1">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Add New Tag</h5>
+								<button aria-label="Close" class="close" data-dismiss="modal"
+									type="button">
+									<span aria-hidden="true"> &times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="addtag">
+									<div class="form-group">
+										<label for=""> Tag Number</label><input class="form-control"
+											placeholder="Enter Tag Number" name="tag" type="text">
+									</div>
+
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-secondary" data-dismiss="modal"
+									type="button">Close</button>
+								<button class="btn btn-primary" type="button" onclick="newTag()">
+									Save Tag</button>
+							</div>
+						</div>
+					</div>
+
+					<audio th:src="@{/js/point-blank.mp3}" id="audio"
+						style="display: none;"></audio>
+
+
+
+
+				</div>
+				<div class="display-type"></div>
+			</div>
+
+			<script type="text/javascript"
+				th:src="@{/bower_components/datatables.net/datatables.min.js}"></script>
+
+			<script
+				th:src="@{/bower_components/popper.js/dist/umd/popper.min.js}"></script>
+			<script th:src="@{/bower_components/moment/moment.js}"></script>
+			<script th:src="@{/bower_components/chart.js/dist/Chart.min.js}"></script>
+			<script
+				th:src="@{/bower_components/select2/dist/js/select2.full.min.js}"></script>
+			<script
+				th:src="@{/bower_components/jquery-bar-rating/dist/jquery.barrating.min.js}"></script>
+			<script
+				th:src="@{/bower_components/bootstrap-validator/dist/validator.min.js}"></script>
+			<script
+				th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+			<script th:src="@{/bower_components/dropzone/dist/dropzone.js}"></script>
+			<script
+				th:src="@{/bower_components/editable-table/mindmup-editabletable.js}"></script>
+
+
+			<script
+				th:src="@{/bower_components/fullcalendar/dist/fullcalendar.min.js}"></script>
+			<script
+				th:src="@{/bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js}"></script>
+			<script th:src="@{/bower_components/tether/dist/js/tether.min.js}"></script>
+			<script
+				th:src="@{/bower_components/slick-carousel/slick/slick.min.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/util.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/alert.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/button.js}"></script>
+<!-- 			<script th:src="@{/bower_components/bootstrap/js/dist/carousel.js}"></script>
+ -->			<script th:src="@{/bower_components/bootstrap/js/dist/collapse.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/dropdown.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/modal.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/tab.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/tooltip.js}"></script>
+			<script th:src="@{/bower_components/bootstrap/js/dist/popover.js}"></script>
+			<script th:src="@{/bower_components/toast/toastr.min.js}"></script>
+			<script th:src="@{/js/demo_customizer.js}"></script>
+			<script th:src="@{/js/main.js}"></script>
+			<script th:src="@{/js/stomp.min.js}"></script>
+
+			<script type="text/javascript" th:inline="javascript">
+		
+   var client;
+   var ip;
+    $(document).ready(function() {
+    	var titlePage = $("#title").attr('data-title');
+    	var company = $("body").attr('data-company');
+    	$("#"+titlePage).addClass("selected");
+    	
+    	$.ajax({
+         	url:[[@{/get/server/ip}]],
+         	type:'get',
+         	success: function(serve){
+       ip=serve;
+		console.log(ip+"------------");
+
+        $.ajax({
+        	url:[[@{/api/get/all/staff}]],
+        	type:'get',
+        	success: function(data2){
+        		var options='';
+        		for(var i in data2){
+        			options+='<option value="'+data2[i].id+'">'+data2[i].firstname+' '+data2[i].lastName+' ('+data2[i].dept+')</option>';
+        			
+        		}
+        		$('#staffer').append(options);
+        		
+        		
+        		 $.ajax({
+        	        	url:[[@{/admin/get/waiting/visitors}]],
+        	        	type:'get',
+        	        	success: function(data){
+        	        		var datas='';
+        	        		for(i in data){
+        	        		
+        	        		datas+='<div class="profile-tile timer"> <a class="profile-tile-box"> <div class="pt-avatar-w"> <img alt="" src="'+data[i].picture+'"> </div> <div class="pt-user-name"> '+data[i].visitorName+' </div> </a> <div class="profile-tile-meta"> <ul> <li> Time In:<b class="time">'+data[i].timeIn+'</b> </li> <li> Staff Name:<strong><a>'+data[i].staffName+'</a></strong> </li> <li> Time Spent:<strong><span class="mins"></span> :<span class="sec"></span> mins</strong> </li> </ul> <div class="pt-btn"> <button class="btn btn-success btn-sm" onclick="send('+'\'Your visitor is still waiting for you\',\''+data[i].staffid+'\')">Send Message</a> </div> </div> </div>';
+
+        	        		
+        	        		console.log(data[i]);
+        	        		}
+        	        		
+        	        		$('#tip').append(datas);
+        	        		
+        	        		
+        	        		
+        	        		
+        	        	}
+        	        	
+        	        });
+        		
+        	}
+        	
+        });
+        
+        $('#vtel').blur(function(){
+			
+			$.ajax({
+				url:[[@{/api/get/visitor/}]]+$(this).val(),
+				
+				type:'get',
+				success:function(data){
+				$('#name').val(data.name);
+				$('#company').val(data.company);
+		    		toastr.success(data.name ,'Welcome Back',  {timeOut: 5000});
+					
+						
+						
+					
+				}
+				
+			}); 
+			
+			});
+		
+        
+      if(window.WebSocket) {
+        var  destination;
+        const protocol = (location.protocol === 'https') ? 'wss://' : 'ws://';
+        
+        client = Stomp.client(protocol+ip+":61614", "v11.stomp");
+
+
+          // this allows to display debug logs directly on the web page
+          client.debug = function(str) {
+            $("#debug").append(str + "\n");
+          };
+          
+          // the client is notified when it is connected to the server.
+          client.connect('admin', 'admin', function(frame) {
+            client.debug("connected to Stomp");
+     console.log(company);
+            client.subscribe(company+':reception', function(message) {
+            	var sender,note;
+            	var dataMessage = String(message.body)
+                if (dataMessage.includes('-')){
+                	var values = dataMessage.split('-');
+                	sender=values[1];
+                	note = values[0] +" Visit from "+ values[2]; 
+                }
+                	else{
+                		var values = dataMessage.split(';');
+                    	sender=values[0];
+                    	note = values[2];
+                	}
+           setTimeout(() => {
+ 			 document.getElementById('audio').play();
+					}, 1)// TODO: handle exception
+            	 notifyMe(sender,note) ;
+            });
+          });
+          return false;
+
+  
+
+   
+     
+    }}
+    	 });
+
+    
+    } );
+
+  
+    
+    function send(message,id){
+    	var formdata = new FormData();
+    	formdata.append('id',id);
+    	formdata.append('message',message);
+    $.ajax({
+    	url:[[@{/admin/message/send}]],
+    	type:'post',
+    	data:formdata,
+    	processData : false,
+    	contentType : false,
+    	cache : false,
+    	success: function(data){
+    	
+    	
+    		toastr.success('Success', 'Message Sent', {timeOut: 5000});
+    		
+
+    	}
+    	
+    });
+    }
+    
+    
+    function notifyMe(sender,message) {
+    	
+        if (!window.Notification) {
+            console.log('Browser does not support notifications.');
+        } else {
+            // check if permission is already granted
+            if (Notification.permission === 'granted') {
+                // show notification here
+			//$('#onboardingWideFormModal').modal('toggle');
+                
+                var notify = new Notification('Message From '+sender, {
+                	 body: message,
+                     icon: [[@{/img/Webp.net-resizeimage.png}]],
+                    
+                });
+                notify.onclick = function(event) {
+                	  event.preventDefault(); // prevent the browser from focusing the Notification's tab
+                	  window.open([[@{/admin/dashboard}]], '_self');
+                	}
+            } else {
+                // request permission from user
+                Notification.requestPermission().then(function (p) {
+                    if (p === 'granted') {
+                        // show notification here
+                        var notify = new Notification('Message from '+sender, {
+                            body: message,
+                            icon: [[@{/img/Webp.net-resizeimage.png}]],
+                        });
+                    } else {
+                        console.log('User blocked notifications.');
+                    }
+                }).catch(function (err) {
+                    console.error(err);
+                });
+            }
+        }
+    }
+    
+    function newAppointmtnet(){
+    	var form = $('#former');
+		var formdata = false;
+		formdata = new FormData(form[0]);
+    $.ajax({
+    	url:[[@{/api/new/appointment}]],
+    	type:'post',
+    	data:formdata,
+    	processData : false,
+		contentType : false,
+		cache : false,
+    	success: function(data){
+    	
+    		$('#appointment').modal('toggle');
+    		toastr.success('Success', 'Appointment Booked', {timeOut: 5000});
+			location.reload();
+
+
+    	}
+    	
+    });
+    }
+    
+    
+    function newTag(){
+    	var form = $('#addtag')
+		var formdata = false;
+		formdata = new FormData(form[0]);
+    $.ajax({
+    	url:[[@{/admin/add/tag}]],
+    	type:'post',
+    	data:formdata,
+    	processData : false,
+		contentType : false,
+		cache : false,
+    	success: function(data){
+    	
+    		$('#tagger').modal('toggle');
+    		toastr.success('Success', 'Tag Added', {timeOut: 5000});
+    		form[0].reset()
+
+    	}
+    	
+    });
+    }
+    
+    function changePassword(){
+    
+    	var form = $('#change');
+		var formdata = false;
+		formdata = new FormData(form[0]);
+    $.ajax({
+    	url:[[@{/admin/change/user/password}]],
+    	type:'post',
+    	data:formdata,
+    	processData : false,
+		contentType : false,
+		cache : false,
+    	success: function(data){
+    	
+    		$('#changePassword').modal('toggle');
+    		toastr.success('Success', 'Password Changed', {timeOut: 5000});
+    		
+
+    	}
+    	
+    });
+    }
+	function parseTime(cTime)
+ 	{
+ 	  if (cTime == '') return null;
+ 	  var d = new Date();
+ 	  var time = cTime.match(/(\d+)(:(\d\d))?\s*(p?)/);
+ 	  d.setHours( parseInt(time[1]) + ( ( parseInt(time[1]) < 12 && time[4] ) ? 12 : 0) );
+ 	  d.setMinutes( parseInt(time[3]) || 0 );
+ 	  d.setSeconds(0, 0);
+ 	  return d;
+ 	}
+    
+    $(document).ready(function() {
+    	piechart();
+    	setInterval(function(){
+    		$('.timer').each(function(i,obj){
+    			var tt= ($(obj).find(".time").text());
+    			
+    			var t=new Date().getTime();
+    			var sec=t-parseTime(tt).getTime();
+    			var minutes =Math.floor(sec/60000);
+    			var seconds= Math.floor((sec%60000)/1000);
+    			 $(obj).find('.sec').html(seconds);
+    			$(obj).find('.mins').html(minutes);
+     
+    			 if(minutes>=3){
+    				$(obj).find('button').removeClass().addClass("btn btn-danger"); 
+    				$(obj).effect('shake',{times:1}); 
+    			 }
+    			
+    		});
+    		
+    	},1000);
+    	getMessages();
+    });
+    
+    function getMessages(){
+    	var additions='<ul>';
+    	$.ajax({
+			url:[[@{/get/reception/messages}]],
+			type:'get',
+			success:function(data){
+				$('#msgcount').html(data.length);
+				for (var i in data){
+					
+	 additions+='<li><a ><div class="message-content"><p class="message-from">'+data[i].message+'</p><h6 class="message-title">'+data[i].sender+'</h6></div></a></li>';		
+	
+	
+					
+				}
+				additions+="</ul>";
+				 $("#redismg").append(additions);	
+				
+			}});
+    	
+    	
+    	
+    }
+
+    
+    
+    
+    function piechart(){
+		var labels =[];
+		var data=[];
+		var colors=[];
+		$.ajax({
+			url:[[@{/get/visitors/by/departments}]],
+			type:'get',
+			success:function(datas){
+				line();
+				for (var i in datas){
+				labels.push(datas[i].key);
+				data.push(datas[i].value);
+				colors.push("#xxxxxx".replace(/x/g, y=>(Math.random()*16|0).toString(16)));
+				}
+				if ($("#pieChart2").length) {
+
+				   var pieChart1 = $("#pieChart2");
+
+				      // pie chart data
+				      var pieData1 = {
+				        labels: labels,
+				        datasets: [{
+				          data: data,
+				          backgroundColor: colors,
+				          hoverBackgroundColor: colors,
+				          borderWidth: 0
+				        }]
+				      };
+
+				      
+				      
+				      
+				      
+				      // -----------------
+				      // init pie chart
+				      // -----------------
+				      new Chart(pieChart1, {
+				        type: 'pie',
+				        data: pieData1,
+				        options: {
+				          legend: {
+				            position: 'bottom',
+				            labels: {
+				              boxWidth: 15,
+				              fontColor: '#3e4b5b'
+				            }
+				          },
+				          animation: {
+				            animateScale: true
+				          }
+				        }
+				      });
+				    
+				}
+				
+			}});
+	}
+		
+		function line(){
+			var labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+			var data =[0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			$.ajax({
+				url:[[@{/get/visits/in/year}]],
+				type:'get',
+				success:function(datas){
+					bar();
+					for(var i in datas){
+						data[parseInt(datas[i].key)]=datas[i].value;
+						
+						
+					}
+					
+					if ($("#lineChart2").length) {
+					      var lineChart = $("#lineChart2");
+
+					      // line chart data
+					      var lineData = {
+					        labels: labels,
+					        datasets: [{
+					          label: "Visitors Graph",
+					          fill: false,
+					          lineTension: 0.3,
+					          backgroundColor: "#fff",
+					          borderColor: "#047bf8",
+					          borderCapStyle: 'butt',
+					          borderDash: [],
+					          borderDashOffset: 0.0,
+					          borderJoinStyle: 'miter',
+					          pointBorderColor: "#fff",
+					          pointBackgroundColor: "#141E41",
+					          pointBorderWidth: 3,
+					          pointHoverRadius: 10,
+					          pointHoverBackgroundColor: "#FC2055",
+					          pointHoverBorderColor: "#fff",
+					          pointHoverBorderWidth: 3,
+					          pointRadius: 5,
+					          pointHitRadius: 10,
+					          data: data,
+					          spanGaps: false
+					        }]
+					      };
+
+					      // line chart init
+					      var myLineChart = new Chart(lineChart, {
+					        type: 'line',
+					        data: lineData,
+					        options: {
+					          legend: {
+					            display: false
+					          },
+					          scales: {
+					            xAxes: [{
+					              ticks: {
+					                fontSize: '11',
+					                fontColor: '#969da5'
+					              },
+					              gridLines: {
+					                color: 'rgba(0,0,0,0.05)',
+					                zeroLineColor: 'rgba(0,0,0,0.05)'
+					              }
+					            }],
+					            yAxes: [{
+					              display: false,
+					              ticks: {
+					                beginAtZero: true,
+					                max: 65
+					              }
+					            }]
+					          }
+					        }
+					      });
+					    }
+					
+					
+					
+				}});
+			
+			
+
+		
+	}
+	
+	function bar(){
+		var labels =[];
+		var data=[];
+		$.ajax({
+			url:[[@{/get/visits/by/year}]],
+			type:'get',
+			success:function(datas){
+				mission();
+				for(var i in datas){
+				labels.push(datas[i].key);
+				data.push(datas[i].value);
+				}
+				
+				 if ($("#barChart2").length) {
+				      var barChart1 = $("#barChart2");
+				      var barData1 = {
+				        labels: labels,
+				        datasets: [{
+				          label: "Visits ",
+				          backgroundColor: ["#5797FC", "#629FFF", "#6BA4FE", "#74AAFF", "#7AAEFF", '#85B4FF'],
+				          borderColor: ['rgba(255,99,132,0)', 'rgba(54, 162, 235, 0)', 'rgba(255, 206, 86, 0)', 'rgba(75, 192, 192, 0)', 'rgba(153, 102, 255, 0)', 'rgba(255, 159, 64, 0)'],
+				          borderWidth: 1,
+				          data: data
+				        }]
+				      };
+				      // -----------------
+				      // init bar chart
+				      // -----------------
+				      new Chart(barChart1, {
+				        type: 'bar',
+				        data: barData1,
+				        options: {
+				          scales: {
+				            xAxes: [{
+				              display: false,
+				              labels:labels,
+				              ticks: {
+				                fontSize: '11',
+				                fontColor: '#969da5'
+				              },
+				              gridLines: {
+				                color: 'rgba(0,0,0,0.05)',
+				                zeroLineColor: 'rgba(0,0,0,0.05)'
+				              }
+				            }],
+				            yAxes: [{
+				              ticks: {
+				                beginAtZero: true
+				              },
+				              gridLines: {
+				                color: 'rgba(0,0,0,0.05)',
+				                zeroLineColor: '#6896f9'
+				              }
+				            }]
+				          },
+				          legend: {
+				            display: false
+				          },
+				          animation: {
+				            animateScale: true
+				          }
+				        }
+				      });
+				    }
+				
+				
+			}});
+		
+				
+	}
+	
+	
+	function mission(){
+		var labels = [];
+		var data=[];
+		$.ajax({
+			url:[[@{/get/visitors/by/mission}]],
+			type:'get',
+			success:function(datas){
+				for(var i in datas){
+					labels.push(datas[i].key);
+					data.push(datas[i].value);
+				}
+				
+				 if ($("#donutChart3").length) {
+			      var donutChart1 = $("#donutChart3");
+
+			      // donut chart data
+			      var data1 = {
+			        labels: labels,
+			        datasets: [{
+			          data: data,
+			          backgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+			          hoverBackgroundColor: ["#5797fc", "#7e6fff", "#4ecc48", "#ffcc29", "#f37070"],
+			          borderWidth: 6,
+			          hoverBorderColor: 'transparent'
+			        }]
+			      };
+
+			      // -----------------
+			      // init donut chart
+			      // -----------------
+			      new Chart(donutChart1	, {
+			        type: 'doughnut',
+			        data: data1,
+			        options: {
+			          legend: {
+			            display: false
+			          },
+			          animation: {
+			            animateScale: true
+			          },
+			          cutoutPercentage: 80
+			        }
+			      });}
+			}});
+		
+		    
+		  
+		
+	}
+    </script>
+
+</div>
+
+		</div>
+</body>
+</html>

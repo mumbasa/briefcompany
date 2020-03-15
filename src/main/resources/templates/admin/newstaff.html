@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>Enroll Staff</title>
+
+</head>
+<body>
+
+	<div class="content-box" layout:fragment="content">
+		<script th:src="@{/webcam/webcam.min.js}"></script>
+
+		<script type="text/javascript" th:inline="javascript">
+
+
+			
+			function dataURItoBlob(dataURI, type) {
+			    // convert base64 to raw binary data held in a string
+			    var byteString = atob(dataURI.split(',')[1]);
+
+			    // separate out the mime component
+			    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+			    // write the bytes of the string to an ArrayBuffer
+			    var ab = new ArrayBuffer(byteString.length);
+			    var ia = new Uint8Array(ab);
+			    for (var i = 0; i < byteString.length; i++) {
+			        ia[i] = byteString.charCodeAt(i);
+			    }
+
+			    // write the ArrayBuffer to a blob, and you're done
+			    var bb = new Blob([ab], { type: type });
+			    return bb;
+			}
+
+			function addUser(){
+				
+				var form = $('#staffform');
+				var formdata = false;
+				formdata = new FormData(form[0]);
+								 
+					$.ajax({
+						url:[[@{/admin/add/new/staff}]],
+						data:formdata,
+						type:'post',
+						processData : false,
+						contentType : false,
+						cache : false,
+						success:function(data){
+						
+				    		toastr.success('Success', 'Staff Added', {timeOut: 5000});
+				    		form[0].reset();
+				    			
+				    		setTimeout(function(){
+				    			location.reload(),2000}
+				    			);
+	
+								
+							
+						}
+						
+					}); 
+					  
+				
+			
+			
+				
+			}
+			
+
+			
+function suspend(id){
+
+	var formdata = new FormData();
+	formdata.append('id',id);				 
+		$.ajax({
+			url:[[@{/admin/suspend/user}]],
+			data:formdata,
+			type:'post',
+			processData : false,
+			contentType : false,
+			cache : false,	
+			success:function(data){
+			
+	    		toastr.success('Success', 'User Account Suspended', {timeOut: 5000});
+
+						$('#suspend'+id).modal('toggle');
+						
+					
+			    			location.reload();
+							 
+				
+			}
+			
+		}); 
+		  
+	
+
+
+	
+}
+			
+			
+function del(id){
+
+	var formdata = new FormData();
+	formdata.append('id',id);				 
+		$.ajax({
+			url:[[@{/admin/delete/user}]],
+			data:formdata,
+			type:'post',
+			processData : false,
+			contentType : false,
+			cache : false,	
+			success:function(data){
+			
+	    		toastr.success('Success', 'User entry Deleted', {timeOut: 5000});
+
+						$('#del'+id).modal('toggle');
+						setTimeout(function(){
+			    			location.reload(),2000}
+			    			);
+
+				
+			}
+			
+		}); 
+		  
+	
+
+
+	
+}
+		</script>
+		<div class="element-wrapper">
+			<h6 class="element-header" id="title" th:data-title="${title}">Enroll Staff</h6>
+			
+			<div class="element-box">
+
+			 <form id="staffform">
+          <h5 class="form-header">
+            Enrollment Form
+          </h5>
+       <!--    <div class="form-desc">
+          </div> -->
+          
+          
+          <legend><span>Personal Details</span></legend>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for=""> Last Name</label><input class="form-control" placeholder="Last Name" type="text" name="lastname">
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="">Other Names</label><input class="form-control" placeholder="Other Names" type="text" name="firstname">
+                </div>
+              </div>
+            </div>
+            <br>
+             <legend><span>Contact Details</span></legend>
+         
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for=""> Telephone Number</label><input class="form-control" placeholder="Telephone" type="text" name="contact">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="">Floor</label><input class="form-control" placeholder="Floor Number" type="number" name="text">
+              </div>
+            </div>
+          </div>
+          <br>
+          
+                     <legend><span>Work Details</span></legend>
+                     
+                     <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                <label for=""> Department</label><select class="form-control" name="dept">
+              <option th:each="a:${dept}" th:text="${a.department}" th:value="${a.id}">
+                Select State
+              </option>
+             
+            </select>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="">Position</label><input class="form-control" placeholder="Position" type="text" name="position">
+                </div>
+              </div>
+            </div>
+        
+            
+          <div class="form-buttons-w">
+            <button class="btn btn-primary" type="button" onclick="addUser()"> Enroll Staff</button>
+          </div>
+        </form>
+
+
+			</div>
+		</div>
+
+		</div>
+
+</body>
+</html>

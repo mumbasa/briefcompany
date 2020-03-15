@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>Messages</title>
+</head>
+<body>
+
+	<div class="content-box" layout:fragment="content">
+<script type="text/javascript">
+
+$(document).ready(function() {
+	setInterval(function(){
+		$('.time').each(function(i,obj){
+			
+			var t=new Date().getTime();
+			var sec=t-parseInt($(obj).attr('data-time'),10);
+			var minutes =Math.floor(sec/60000);
+			var seconds= Math.floor((sec%60000)/1000);
+			 $(obj).find('.sec').html(seconds);
+			$(obj).find('.mins').html(minutes);
+
+			
+		});
+		
+	},1000);
+	
+});
+
+
+
+</script>
+		<div class="element-wrapper">
+			<h6 class="element-header" id="title" th:data-title="${title}">Messages From Staff<span th:text="${from}"></span> To <span th:text="${from}"></span></h6>
+			
+
+<div class="table-responsive">
+                        <table class="table table-padded  table-hover" id="dataTable1">
+                          <thead>
+                            <tr>
+                          
+                              <th>
+                                Staff
+                              </th>
+                              <th>
+                                Message
+                              </th>
+                              <th class="text-right">
+                                Time
+                              </th>
+                            
+                              
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="mb-1" th:each="a,i:${msgs}">
+                         
+                              <td>
+                                <div class="user-with-avatar">
+                                  <img alt="" th:src="@{/favicon.png}"><span th:text="${a.sender}">John Mayers</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="medium lighter" th:text="${a.message}">
+                                  I have enabled the software for you, you can try now...
+                                </div>
+                              </td>
+                              <td class="text-right time" th:data-time="${a.timeStamp}">
+                                <span>Today</span><span class="smaller lighter text-right" > </span>
+                                <span class="mins"></span> mins:<span class="sec"> sec</span> ago
+                              </td>
+                           
+                              
+                            </tr>
+                        </table>
+                      </div>
+				</div>
+		</div>
+
+
+	
+
+</body>
+</html>

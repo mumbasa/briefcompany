@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/blank}">
+<head>
+<meta charset="UTF-8">
+<title>Visits</title>
+</head>
+<body>
+
+	<div class="content-box" layout:fragment="content">
+		<script type="text/javascript" th:inline="javascript">
+	
+	function signOut(id){
+		var catty = [[@{/admin/reception/signout}]]
+		  $.ajax({
+	        	url:catty,
+	        	data:"id="+id,
+	        	type:'get',
+	        	success: function(data){
+	        		toastr.success('Success', 'Visitor Signed Out', {timeOut: 5000});
+
+	        	}
+	        	
+	        });
+	        
+		
+	}
+	
+	</script>
+		<div class="element-wrapper">
+			<h6 class="element-header" id="title" th:data-title="${title}">Visits
+				Today</h6>
+			<div class="element-box">
+
+
+				<div class="table-responsive">
+					<table id="dataTable1" width="100%"
+						class="table table-striped table-lightfont">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Company</th>
+								<th>Telephone</th>
+								<th>Date Added</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Company</th>
+								<th>Telephone</th>
+								<th>Date Added</th>
+								<th></th>
+							</tr>
+						</tfoot>
+						<tbody>
+							<tr th:each="a,i:${visitors}">
+								<td th:text="${i.index+1}">Tiger Nixon</td>
+
+								<td th:text="${a.name}" style="text-transform: capitalize;">System
+									Architect</td>
+								<td th:text="${a.company}">Edinburgh</td>
+								<td th:text="${a.telephone}">2011/04/25</td>
+								<td th:text="${a.date}">61</td>
+								<td><button class="btn btn-primary">View Visits</button> 
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+</body>
+</html>

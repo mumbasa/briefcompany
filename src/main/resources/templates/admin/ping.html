@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Go Ping Email</title>
+    <!-- Designed by https://github.com/kaytcat -->
+    <!-- Header image designed by Freepik.com -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style type="text/css">
+    /* Take care of image borders and formatting */
+
+    img { max-width: 600px; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;}
+    a img { border: none; }
+    table { border-collapse: collapse !important; }
+    #outlook a { padding:0; }
+    .ReadMsgBody { width: 100%; }
+    .ExternalClass {width:100%;}
+    .backgroundTable {margin:0 auto; padding:0; width:100%;!important;}
+    table td {border-collapse: collapse;}
+    .ExternalClass * {line-height: 115%;}
+
+
+    /* General styling */
+
+    td {
+      font-family: Arial, sans-serif;
+      color: #5e5e5e;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    body {
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:none;
+      width: 100%;
+      height: 100%;
+      color: #5e5e5e;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+
+    h1 {
+      margin: 10px 0;
+    }
+
+    a {
+      color: #2b934f;
+      text-decoration: none;
+    }
+
+
+    .body-padding {
+      padding: 0 75px;
+    }
+
+
+    .force-full-width {
+      width: 100% !important;
+    }
+
+    .icons {
+      text-align: right;
+      padding-right: 30px;
+    }
+
+    .logo {
+      text-align: left;
+      padding-left: 30px;
+    }
+
+    .computer-image {
+      padding-left: 30px;
+    }
+
+    .header-text {
+      text-align: left;
+      padding-right: 30px;
+      padding-left: 20px;
+    }
+
+    .header {
+      color: #232925;
+      font-size: 24px;
+    }
+
+
+
+    </style>
+<script type="text/javascript">
+$(document).ready(function(){
+	const date = new Date();
+	$('#cp').html(date.getFullYear());
+	
+	
+});
+
+</script>
+    <style type="text/css" media="screen">
+        @media screen {
+          @import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+          /* Thanks Outlook 2013! */
+          * {
+            font-family: 'PT Sans', 'Helvetica Neue', 'Arial', 'sans-serif' !important;
+          }
+        }
+    </style>
+
+    <style type="text/css" media="only screen and (max-width: 599px)">
+      /* Mobile styles */
+      @media only screen and (max-width: 599px) {
+
+        table[class*="w320"] {
+          width: 320px !important;
+        }
+
+        td[class*="icons"] {
+          display: block !important;
+          text-align: center !important;
+          padding: 0 !important;
+        }
+
+        td[class*="logo"] {
+          display: block !important;
+          text-align: center !important;
+          padding: 0 !important;
+        }
+
+        td[class*="computer-image"] {
+          display: block !important;
+          width: 230px !important;
+          padding: 0 45px !important;
+          border-bottom: 1px solid #e3e3e3 !important;
+        }
+
+
+        td[class*="header-text"] {
+          display: block !important;
+          text-align: center !important;
+          padding: 0 25px!important;
+          padding-bottom: 25px !important;
+        }
+
+        *[class*="mobile-hide"] {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+          line-height: 0 !important;
+          font-size: 0 !important;
+        }
+
+
+      }
+    </style>
+  </head>
+  <body  offset="0" class="body" style="padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none" bgcolor="#ffffff">
+  <table align="center" cellpadding="0" cellspacing="0" width="100%" height="100%">
+    <tr>
+      <td align="center" valign="top" style="background-color:#ffffff" width="100%">
+
+      <center>
+        <table cellspacing="0" cellpadding="0" width="600" class="w320">
+          <tr>
+            <td align="center" valign="top">
+
+              <table class="force-full-width" cellspacing="0" cellpadding="0" bgcolor="#232925">
+                <tr>
+                  <td style="background-color:#232925" class="logo">
+                    <br>
+                    <a href="#"><img src="data:image/png;base64,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
+" alt="Logo"></a> 
+                  </td>
+                  <td class="icons">
+                    <br>
+                   
+                  </td>
+                </tr>
+              </table>
+
+              <table cellspacing="0" cellpadding="0" class="force-full-width" bgcolor="#232925">
+                <tr>
+                  <td class="computer-image">
+                    <br>
+                    <br class="mobile-hide" />
+                    <img style="display:block;" width="224" height="213" src="https://www.filepicker.io/api/file/CoMxXSlVRDuRQWNwnMzV" alt="hello">
+                  </td>
+                  <td style="color: #ffffff;" class="header-text">
+                    <br>
+                    <br>
+                    <h2>Appointment Decision</h2><br><br>
+                    Your appointment with <span th:text="${staffName}">Awesome Inc</span> of<span th:text="${company}">Awesome Inc</span> has been <b th:text="${decision}">accepted</b>.
+                    <br>
+                    <br>
+                     
+                      <br>
+                  </td>
+                </tr>
+              </table>
+
+
+              <table class="force-full-width" cellspacing="0" cellpadding="30" bgcolor="#ebebeb">
+                <tr>
+                  <td>
+                    <table cellspacing="0" cellpadding="0" class="force-full-width">
+                      <tr>
+                        <td>
+                          Hi <spa th:text="${visitor}">bob</spa>,<br>
+                          <br>
+                          <span th:text="${message}">
+                          Your account settings have been updated. If you did not update your settings, please <a href="#">contact support.</a></span><br>
+                          Note the details below:<br><br><hr>
+                          <b>Appointment Date:</b> <span th:text="${date}"></span><br>
+                         <b> Appointment Time:</b> <span th:text="${time}"></span><br>
+                          <br>
+                          Sincerely,<br><br>
+                          <span th:text="${staffName}">Awesome Inc</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+
+              <table class="force-full-width" cellspacing="0" cellpadding="20" bgcolor="#2b934f">
+                <tr>
+                  <td style="background-color:#6bc4a7; color:#ffffff; font-size: 14px; text-align: center;" >
+                    © <span id="cp">2014</span> All Rights Reserved
+                  </td>
+                </tr>
+              </table>
+
+
+            </td>
+          </tr>
+        </table>
+
+      </center>
+      </td>
+    </tr>
+  </table>
+  </body>
+</html>
