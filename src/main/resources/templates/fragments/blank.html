@@ -166,10 +166,10 @@
 
 
 				</ul>
-		<div class="logo-label text-info"> Powered by &nbsp</div>
+	<!-- 	<div class="logo-label text-info"> Powered by &nbsp</div>
 					<div>
 						<img th:src="@{/img/surline.png}" style="width: 60%">
-					</div>
+					</div> -->
 				
 			
 			</div>
@@ -684,7 +684,7 @@
           };
           
           // the client is notified when it is connected to the server.
-          client.connect('admin', 'admin', function(frame) {
+          client.connect('', '', function(frame) {
             client.debug("connected to Stomp");
      console.log(company);
             client.subscribe(company+':reception', function(message) {

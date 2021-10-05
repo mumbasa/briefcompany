@@ -182,7 +182,7 @@ public class ReceptionistController {
 	public int addNewStaff(@RequestParam("lastname") String lastName, @RequestParam("firstname") String firstName,
 			@RequestParam("email") String email, @RequestParam("dept") int department,
 			@RequestParam("contact") String telephone, @RequestParam("position") String position) {
-		System.out.println(telephone);
+		System.out.println(email);
 
 		return staffRepo.saveStaff(email, telephone, position, department, firstName, lastName);
 	}
@@ -198,7 +198,7 @@ public class ReceptionistController {
 		 * catch (IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); return ""; }
 		 */
-		 return "157.245.134.202";
+		 return "vmi582247.contaboserver.net";
 
 	}
 

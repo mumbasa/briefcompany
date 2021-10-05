@@ -49,8 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 		 http.authorizeRequests().requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
 		   http.
            authorizeRequests()
-         
-           .antMatchers("/add/**").permitAll()
+		.antMatchers("/v1/api/authenticate","/v1/api/constants/**","/v1/api/institute/**","/home/**","/","/v2/api-docs","/webjars/**","/swagger-resources/**",  "/configuration/**", "/*.html","/favicon.ico","/**/*.html","/**/*.css","/**/*.js").permitAll().
+
+           antMatchers("/add/**").permitAll()
            .antMatchers("/img/*").permitAll()
            .antMatchers("/downloadFile/*").permitAll()
            .antMatchers("/api/**").permitAll()

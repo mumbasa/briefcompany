@@ -22,9 +22,9 @@
         <div class="logo-w">
           <img alt="" th:src="@{/img/bird.png}" style="width: 80%;">
         </div>
-        <h5 class="auth-header ">
+      <!--   <h5 class="auth-header ">
           <span th:text="${company}" class="text-center"></span> LOGIN 
-        </h5>
+        </h5> -->
         <form th:action="@{/login}" method="post">
           <div class="form-group">
             <label for="">Username</label><input class="form-control" placeholder="Enter your username" type="text" name="email">
@@ -42,10 +42,10 @@
                 
           
           </div>
-            <p class="text-center mt-5 text-info"> Powered by </p>
+       <!--      <p class="text-center mt-5 text-info"> Powered by </p>
 					<div class="text-center">
 						<img th:src="@{/img/surline.png}" style="width: 40%">
-					</div>
+					</div> -->
         </form>
       </div>
        
