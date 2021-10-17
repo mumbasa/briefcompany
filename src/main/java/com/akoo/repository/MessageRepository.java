@@ -121,7 +121,7 @@ public class MessageRepository {
 	}
 
 	public int sendNotfiyStaff(String  id,String message) {
-	String sql ="INSERT INTO `akoo`.`messages`(`message`,`from`,`staffid`,`date`) VALUES(?,'Receptionist',?,curdate())";
+	String sql ="INSERT INTO `messages`(`message`,`from`,`staffid`,`date`) VALUES(?,'Receptionist',?,curdate())";
 	jmsTemplate.convertAndSend(id, message);
 	return jdbcTemplate.update(sql, message,id);
 	

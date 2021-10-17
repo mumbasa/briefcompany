@@ -201,9 +201,8 @@ $.ajax({
 	contentType : false,
 	cache : false,
 	success: function(data){
-	
-		$('#mgs'+id).modal('toggle');
 		toastr.success('Success', 'Message Sent', {timeOut: 5000});
+		$('#mgs'+code).modal('toggle');
 		
 
 	}
