@@ -167,7 +167,21 @@ public class StaffRepository {
 
 	public Staff getStaff(String id) {
 		String sql = "SELECT * FROM staff as s join department as d on s.dept=d.dept_id where id=?";
-		return jdbcTemplate.queryForObject(sql, new StaffRowMapping(), id);
+		Staff staff = null;
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql,id);
+		if(row.next()) {
+			staff = new Staff();
+			staff.setDept(row.getString(12));
+			staff.setFirstname(row.getString("firstname"));
+			staff.setPosition(row.getString("position"));
+			staff.setLastName(row.getString("lastname"));
+			staff.setId(row.getString("id"));
+			staff.setEmail(row.getString("email"));
+			staff.setPassword(row.getString("password"));
+			staff.setRowId(row.getLong(8));
+			staff.setStatus(row.getString("status"));
+		}
+		return staff;
 
 	}
 

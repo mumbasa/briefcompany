@@ -137,6 +137,13 @@ public class ReceptionistController {
 		return "admin/visits";
 	}
 	
+	@RequestMapping("/admin/visitors/{id}/visits")
+	public String getVisits(Model model,@PathVariable String id) {
+		model.addAttribute("title", "visits");
+		model.addAttribute("visits", visitorRepository.getVisitorsVisitsByTelephone(id));
+		return "admin/visits";
+	}
+	
 	@RequestMapping("/admin/visitors/report")
 	public String getVisitors(Model model) {
 		model.addAttribute("title", "visits");

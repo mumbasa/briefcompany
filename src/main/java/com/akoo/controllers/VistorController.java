@@ -97,6 +97,15 @@ public class VistorController {
 
 	}
 
+	
+	@RequestMapping("/api/get/visitor/{id}/visits/")
+	public ResponseEntity<List<VisitorVisitSummary>> visitorVisitors(@PathVariable(name = "id") String id) {
+
+		return new ResponseEntity<List<VisitorVisitSummary>>(visitorRepository.getStaffVisitorsByTelephone(id), HttpStatus.OK);
+
+	}
+
+	
 	@RequestMapping("/api/get/visits/today")
 	public ResponseEntity<List<VisitorVisitSummary>> visitorsToday() {
 

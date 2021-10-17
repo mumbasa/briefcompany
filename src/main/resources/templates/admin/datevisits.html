@@ -86,7 +86,7 @@
           <div class="modal-content text-center">
             <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span class="os-icon os-icon-close"></span></button>
             <div class="onboarding-media">
-              <img alt="" th:src="'http://localhost/akoo/'+${a.picture}" width="100%">
+              <img alt="" th:src="${a.picture}" width="100%">
             </div>
             <div class="onboarding-content with-gradient">
               <h4 class="onboarding-title" th:text="${a.visitorName}">

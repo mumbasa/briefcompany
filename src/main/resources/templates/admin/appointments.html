@@ -42,7 +42,7 @@
 							</tr>
 						</tfoot>
 						<tbody>
-							<tr th:each="a,i:${appointments}">
+							<tr th:each="a,i:${appointments}" >
 								<td th:text="${i.index+1}">Tiger Nixon</td>
 								<td th:text="${a.visitor.name}">System Architect</td>
 								<td th:text="${a.visitor.company}">Edinburgh</td>

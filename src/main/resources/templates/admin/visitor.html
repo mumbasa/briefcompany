@@ -66,7 +66,7 @@
 								<td th:text="${a.company}">Edinburgh</td>
 								<td th:text="${a.telephone}">2011/04/25</td>
 								<td th:text="${a.date}">61</td>
-								<td><button class="btn btn-primary">View Visits</button> 
+								<td><a class="btn btn-primary" th:href="@{'/admin/visitors/'+${a.telephone}+'/visits'}">View Visits</a> 
 							</tr>
 
 						</tbody>

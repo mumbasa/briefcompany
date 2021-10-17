@@ -1,11 +1,13 @@
 package com.akoo.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -110,42 +112,100 @@ public class AppointmentRepository {
 
 	public List<Appointment> getAllUpcomingAppointments(String date) {
 		String sql = "SELECT * FROM appointments where appointment_date>=? and status='accepted'";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper(), date);
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(a.getStaffId()));
-			a.setVisitor(visitorRepository.getVisitorbyVisit(a.getVisitId(), false));
+		List<Appointment> g = new ArrayList<Appointment>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql,  date);
+		while (row.next()) {
+			Appointment app = new Appointment();
+			app.setId(row.getLong("id"));
+			app.setStatus(row.getString("status"));		
+			app.setVisitId(row.getString("visit_id"));
+			app.setAppointmentDate(row.getString("appointment_date"));
+			app.setAppointmentTime(row.getString("appointment_time"));
+			app.setTimeStamp(row.getLong("timestamp_date"));
+			app.setPurpose(row.getString("reason"));
+			app.setMessage(row.getString("response_message"));
+			app.setStaffId(row.getString("staff_id"));
+			app.setEmail(row.getString("email"));
+			app.setBookingDate(row.getString("date"));
+			app.setTitle(row.getString("title"));	
+			app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+			app.setStaff(staffRepository.getStaff(app.getStaffId()));
+			g.add(app);
 		}
 		return g;
 	}
 
 	public List<Appointment> getStaffUpcomingAppointments(String staff, String date) {
 		String sql = "SELECT * FROM appointments where staff_id=? and appointment_date>=? and status='accepted'";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper(), staff, date);
-		// looping to set visitor and staff details
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(staff));
-			a.setVisitor(visitorRepository.getVisitor(Long.parseLong(a.getVisitId())));
+		List<Appointment> g = new ArrayList<Appointment>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql, staff, date);
+		while (row.next()) {
+			Appointment app = new Appointment();
+			app.setId(row.getLong("id"));
+			app.setStatus(row.getString("status"));		
+			app.setVisitId(row.getString("visit_id"));
+			app.setAppointmentDate(row.getString("appointment_date"));
+			app.setAppointmentTime(row.getString("appointment_time"));
+			app.setTimeStamp(row.getLong("timestamp_date"));
+			app.setPurpose(row.getString("reason"));
+			app.setMessage(row.getString("response_message"));
+			app.setStaffId(row.getString("staff_id"));
+			app.setEmail(row.getString("email"));
+			app.setBookingDate(row.getString("date"));
+			app.setTitle(row.getString("title"));	
+			app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+			app.setStaff(staffRepository.getStaff(app.getStaffId()));
+			g.add(app);
 		}
 		return g;
 	}
 
 	public List<Appointment> getStaffTodayAppointments(String staff) {
 		String sql = "SELECT * FROM appointments where staff_id=? and appointment_date=curdate() and status='accepted'";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper(), staff);
-		// looping to set visitor and staff details
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(staff));
-			a.setVisitor(visitorRepository.getVisitor(Long.parseLong(a.getVisitId())));
+		List<Appointment> g = new ArrayList<Appointment>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql,staff);
+		while (row.next()) {
+			Appointment app = new Appointment();
+			app.setId(row.getLong("id"));
+			app.setStatus(row.getString("status"));		
+			app.setVisitId(row.getString("visit_id"));
+			app.setAppointmentDate(row.getString("appointment_date"));
+			app.setAppointmentTime(row.getString("appointment_time"));
+			app.setTimeStamp(row.getLong("timestamp_date"));
+			app.setPurpose(row.getString("reason"));
+			app.setMessage(row.getString("response_message"));
+			app.setStaffId(row.getString("staff_id"));
+			app.setEmail(row.getString("email"));
+			app.setBookingDate(row.getString("date"));
+			app.setTitle(row.getString("title"));	
+			app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+			app.setStaff(staffRepository.getStaff(app.getStaffId()));
+			g.add(app);
 		}
 		return g;
 	}
 
 	public List<Appointment> getStaffAppointments(String staff) {
 		String sql = "SELECT * FROM appointments where staff_id=?";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper(), staff);
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(staff));
-			a.setVisitor(visitorRepository.getVisitor(Long.parseLong(a.getVisitId())));
+		List<Appointment> g = new ArrayList<Appointment>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql,staff);
+		while (row.next()) {
+			Appointment app = new Appointment();
+			app.setId(row.getLong("id"));
+			app.setStatus(row.getString("status"));		
+			app.setVisitId(row.getString("visit_id"));
+			app.setAppointmentDate(row.getString("appointment_date"));
+			app.setAppointmentTime(row.getString("appointment_time"));
+			app.setTimeStamp(row.getLong("timestamp_date"));
+			app.setPurpose(row.getString("reason"));
+			app.setMessage(row.getString("response_message"));
+			app.setStaffId(row.getString("staff_id"));
+			app.setEmail(row.getString("email"));
+			app.setBookingDate(row.getString("date"));
+			app.setTitle(row.getString("title"));	
+			app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+			app.setStaff(staffRepository.getStaff(app.getStaffId()));
+			g.add(app);
 		}
 		return g;
 
@@ -163,31 +223,79 @@ public class AppointmentRepository {
 
 	public List<Appointment> getAllUnAnsweredAppointments() {
 		String sql = "SELECT * FROM appointments where status is null";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper());
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(a.getStaffId()));
-			a.setVisitor(visitorRepository.getVisitor(Long.parseLong(a.getVisitId())));
-		}
+		List<Appointment> g = new ArrayList<Appointment>(); 
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql);
+				while (row.next()) {
+					Appointment app = new Appointment();
+					app.setId(row.getLong("id"));
+					app.setStatus(row.getString("status"));		
+					app.setVisitId(row.getString("visit_id"));
+					app.setAppointmentDate(row.getString("appointment_date"));
+					app.setAppointmentTime(row.getString("appointment_time"));
+					app.setTimeStamp(row.getLong("timestamp_date"));
+					app.setPurpose(row.getString("reason"));
+					app.setMessage(row.getString("response_message"));
+					app.setStaffId(row.getString("staff_id"));
+					app.setEmail(row.getString("email"));
+					app.setBookingDate(row.getString("date"));
+					app.setTitle(row.getString("title"));	
+					app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+					app.setStaff(staffRepository.getStaff(app.getStaffId()));
+					g.add(app);
+				}
+						
 		return g;
 	}
 
 	public List<Appointment> getAnsweredAppointments() {
 		String sql = "SELECT * FROM appointments where status is not null and year(date)=year(curdate())";
-		List<Appointment> g = jdbcTemplate.query(sql, new AppointmentMapper());
-		for (Appointment a : g) {
-			a.setStaff(staffRepository.getStaff(a.getStaffId()));
-			a.setVisitor(visitorRepository.getVisitor(Long.parseLong(a.getVisitId())));
-		}
+		List<Appointment> g = new ArrayList<Appointment>(); 
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql);
+				while (row.next()) {
+					Appointment app = new Appointment();
+					app.setId(row.getLong("id"));
+					app.setStatus(row.getString("status"));		
+					app.setVisitId(row.getString("visit_id"));
+					app.setAppointmentDate(row.getString("appointment_date"));
+					app.setAppointmentTime(row.getString("appointment_time"));
+					app.setTimeStamp(row.getLong("timestamp_date"));
+					app.setPurpose(row.getString("reason"));
+					app.setMessage(row.getString("response_message"));
+					app.setStaffId(row.getString("staff_id"));
+					app.setEmail(row.getString("email"));
+					app.setBookingDate(row.getString("date"));
+					app.setTitle(row.getString("title"));	
+					app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+					app.setStaff(staffRepository.getStaff(app.getStaffId()));
+					g.add(app);
+				}
+						
 		return g;
 	}
 
 	public Appointment getAppointmentById(String id) {
 		String sql = "SELECT * FROM appointments where id=?";
-		Appointment appointment = jdbcTemplate.queryForObject(sql, new AppointmentMapper(), id);
-
-		appointment.setStaff(staffRepository.getStaff(appointment.getStaffId()));
-		appointment.setVisitor(visitorRepository.getVisitor(Long.parseLong(appointment.getVisitId())));
-
-		return appointment;
+		Appointment app = null;
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql,id);
+				if (row.next()) {
+					 app = new Appointment();
+					app.setId(row.getLong("id"));
+					app.setStatus(row.getString("status"));		
+					app.setVisitId(row.getString("visit_id"));
+					app.setAppointmentDate(row.getString("appointment_date"));
+					app.setAppointmentTime(row.getString("appointment_time"));
+					app.setTimeStamp(row.getLong("timestamp_date"));
+					app.setPurpose(row.getString("reason"));
+					app.setMessage(row.getString("response_message"));
+					app.setStaffId(row.getString("staff_id"));
+					app.setEmail(row.getString("email"));
+					app.setBookingDate(row.getString("date"));
+					app.setTitle(row.getString("title"));	
+					app.setVisitor(visitorRepository.getVisitor(Long.parseLong(app.getVisitId())));
+					app.setStaff(staffRepository.getStaff(app.getStaffId()));
+				}
+						
+		
+		return app;
 	}
 }

@@ -219,7 +219,7 @@ public class VisitorRepository {
 			return 0;
 		} else {
 			return addVisit(visitor.getId(), staffid, car, mission,
-					"https://" + hostIp + "/" + companyName + "/" + "downloadFile/" + filename);
+					"https://" + hostIp + ":8443/" + companyName + "/" + "downloadFile/" + filename);
 		}
 	}
 
@@ -244,11 +244,9 @@ public class VisitorRepository {
 		}
 		try {
 			jmsTemplate.convertAndSend(staffid, name + " from " + company + " wants to see you");
-			
-			  messageRepository.sendSms(name + " from " + company +
-			  " wants to see you. You can call your visitor on " + visitor.getTelephone() +
-			  ". Thank you", staffid);
-			 
+
+			messageRepository.sendSms(name + " from " + company + " wants to see you. You can call your visitor on "
+					+ visitor.getTelephone() + ". Thank you", staffid);
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -258,7 +256,7 @@ public class VisitorRepository {
 			return 0;
 		} else {
 			return addVisit(visitor.getId(), staffid, car, mission,
-					"https://" + hostIp + "/" + companyName + "/" + "downloadFile/" + filename);
+					"https://" + hostIp + ":8443/" + companyName + "/" + "downloadFile/" + filename);
 		}
 	}
 
@@ -277,21 +275,37 @@ public class VisitorRepository {
 
 	public Visitor getVisitor(long id) {
 		String sql = "SElECT * FROM visitors where id=?";
-		Visitor v = jdbcTemplate.queryForObject(sql, new VisitorRowMapping(), id);
+		Visitor visit = null;
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql, id);
+		if (row.next()) {
+			visit = new Visitor();
+			visit.setId(row.getLong(1));
+			visit.setName(row.getString("name"));
+			visit.setTelephone(row.getString("telephone"));
+			visit.setCompany(row.getString("froms"));
+			visit.setDate(row.getString("date"));
 
-		return v;
+		}
+		return visit;
 	}
 
-	
 	public List<Visitor> getVisitors() {
 		String sql = "SElECT * FROM visitors";
-		List<Visitor> v = jdbcTemplate.query(sql, new VisitorRowMapping());
+		List<Visitor> v = new ArrayList<Visitor>();
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql);
+		while (row.next()) {
+			Visitor visit = new Visitor();
+			visit.setId(row.getLong(1));
+			visit.setName(row.getString("name"));
+			visit.setTelephone(row.getString("telephone"));
+			visit.setCompany(row.getString("froms"));
+			visit.setDate(row.getString("date"));
+			v.add(visit);
+		}
 
 		return v;
 	}
 
-	
-	
 	public boolean isVisitorStillIn(long id) {
 		boolean result = false;
 		String sql = "SELECT *  FROM  visitor_visits where visitor_id=? and date=curdate() and time_out is null;";
@@ -319,9 +333,18 @@ public class VisitorRepository {
 
 	public Visitor getVisitorById(String id) {
 		String sql = "SElECT * FROM visitors where id=?";
-		Visitor v = jdbcTemplate.queryForObject(sql, new VisitorRowMapping(), id);
+		Visitor visit = null;
+		SqlRowSet row = jdbcTemplate.queryForRowSet(sql, id);
+		if (row.next()) {
+			visit = new Visitor();
+			visit.setId(row.getLong(1));
+			visit.setName(row.getString("name"));
+			visit.setTelephone(row.getString("telephone"));
+			visit.setCompany(row.getString("froms"));
+			visit.setDate(row.getString("date"));
+		}
 
-		return v;
+		return visit;
 	}
 
 	public LogoutVisitor getVisitData(String id) {
@@ -425,6 +448,13 @@ public class VisitorRepository {
 		return jdbcTemplate.query(sql, visits, id);
 
 	}
+	
+	public List<VisitorVisitSummary> getVisitorsVisitsByTelephone(String id) {
+		String sql = "SELECT visit_id,name,telephone,car_number,froms,vv.date,time_in ,time_out,status,(SELECT concat(firstname, ' ',lastname) from staff as s where s.id=vv.staff_id),mission,picture,staff_id,tag   from visitor_visits as vv join visitors as v on v.id=vv.visitor_id where v.telephone=?  order by vv.visit_id desc";
+		RowMapper<VisitorVisitSummary> visits = new VisitSummaryMapper();
+		return jdbcTemplate.query(sql, visits, id);
+
+	}
 
 	public List<VisitorVisitSummary> getStaffVisitor(String id) {
 		String sql = "SELECT visit_id,name,telephone,car_number,froms,vv.date,time_in ,time_out,status,(SELECT concat(firstname, ' ',lastname) from staff as s where s.id=vv.staff_id),mission,picture,staff_id,tag   from visitor_visits as vv join visitors as v on v.id=vv.visitor_id where vv.staff_id=? order by vv.visit_id desc";
@@ -439,7 +469,7 @@ public class VisitorRepository {
 		return jdbcTemplate.queryForObject(sql, visits, id);
 
 	}
-	
+
 	public VisitorVisitSummary getSummById(String id) {
 		String sql = "SELECT visit_id,name,telephone,car_number,froms,vv.date,time_in ,time_out,status,(SELECT concat(firstname, ' ',lastname) from staff as s where s.id=vv.staff_id),mission,picture,staff_id,tag   from visitor_visits as vv join visitors as v on v.id=vv.visitor_id where vv.visit_id=? ";
 		RowMapper<VisitorVisitSummary> visits = new VisitSummaryMapper();
@@ -473,7 +503,6 @@ public class VisitorRepository {
 		return response;
 	}
 
-	
 	public ResultResponse visitorWebAppSignOut(String id) {
 		System.out.println(id + "------------");
 		VisitorVisitSummary sum = getSummById(id);
@@ -486,7 +515,6 @@ public class VisitorRepository {
 		return response;
 	}
 
-	
 	public int visitorStatus(String id) {
 		String sql = "UPDATE visitor_visits set status='Responded' where id=?";
 		return jdbcTemplate.update(sql, id);
@@ -605,10 +633,10 @@ public class VisitorRepository {
 
 	public ResultResponse visitorAccept(String visitId) {
 		VisitorVisitSummary visitData = getSummById(visitId);
-		String messageToStore = visitData.getStaffName() + ";Accept Visit; Accept visit From " + visitData.getVisitorName() +" from "+ visitData.getCompany()
-				+ ";" + System.currentTimeMillis();
+		String messageToStore = visitData.getStaffName() + ";Accept Visit; Accept visit From "
+				+ visitData.getVisitorName() + " from " + visitData.getCompany() + ";" + System.currentTimeMillis();
 		jmsTemplate.convertAndSend(companyName + ":reception", messageToStore);
-		messager.opsForList().leftPush(companyName+":reception:messages",messageToStore);
+		messager.opsForList().leftPush(companyName + ":reception:messages", messageToStore);
 		String sql = "UPDATE visitor_visits set status='Accepted' where visit_id=?";
 		int row = jdbcTemplate.update(sql, visitId);
 		ResultResponse r = new ResultResponse();
@@ -619,10 +647,10 @@ public class VisitorRepository {
 
 	public ResultResponse visitorReject(String visitId) {
 		VisitorVisitSummary visitData = getSummById(visitId);
-		String messageToStore = visitData.getStaffName() + ";Decline Visit; Declines visit From " + visitData.getVisitorName() +" from "+ visitData.getCompany()
-		+ ";" + System.currentTimeMillis();
+		String messageToStore = visitData.getStaffName() + ";Decline Visit; Declines visit From "
+				+ visitData.getVisitorName() + " from " + visitData.getCompany() + ";" + System.currentTimeMillis();
 		jmsTemplate.convertAndSend(companyName + ":reception", messageToStore);
-		messager.opsForList().leftPush(companyName+":reception:messages",messageToStore);
+		messager.opsForList().leftPush(companyName + ":reception:messages", messageToStore);
 		String sql = "UPDATE visitor_visits set status='Declined' where visit_id=?";
 		int row = jdbcTemplate.update(sql, visitId);
 		ResultResponse r = new ResultResponse();
@@ -659,9 +687,9 @@ public class VisitorRepository {
 	public String decodeBase64String(String fileString) {
 		String filename = System.currentTimeMillis() + ".jpg";
 		byte dearr[] = Base64.getDecoder().decode(fileString.replaceAll(" ", "+"));
-		
+
 		try {
-			FileUtils.writeByteArrayToFile(new File(UPLOAD_FOLDER+appName+filename), dearr);
+			FileUtils.writeByteArrayToFile(new File(UPLOAD_FOLDER + appName + filename), dearr);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
