@@ -69,10 +69,6 @@ public class StaffRepository {
 
 	public int saveStaff(String email, String contact, String position, int department, String firstName,
 			String lastName) {
-		try {
-			getStaff(contact);
-			return 0;
-		} catch (Exception e) {
 			// TODO: handle exception
 			String generatedString = RandomStringUtils.random(6, false, true);
 			String sql = "INSERT INTO staff(id,firstname,lastname,dept,position,email,password) VALUES(?,?,?,?,?,?,?)";
@@ -84,7 +80,7 @@ public class StaffRepository {
 							+ " is your Briefta VMS App login & verification PIN. Please keep it safe.\nThank you",
 					contact);
 			return rows;
-		}
+	
 
 	}
 

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import com.akoo.data.StafMessage;
 import com.akoo.data.Visit;
 
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
 @Service
@@ -71,6 +73,16 @@ public class MessageRepository {
 	}
 
 	
+	
+	public static void main(String[] args) {
+	String k =	Unirest.get("https://apps.mnotify.net/smsapi").
+		queryString("key", "dYxNxwUHdPDSYlCgd4cTxJJap").
+		queryString("to", "0267600606").
+		queryString("msg","message" ).
+		queryString("sender_id", "BrieftaTech")
+		.asString().getBody();
+	System.err.println(k);
+	}
 
 	public List<StafMessage> getReceptionistMessages() {
 		List<StafMessage> messages= new ArrayList<StafMessage>();
