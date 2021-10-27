@@ -75,9 +75,9 @@ public class StaffRepository {
 
 			int rows = jdbcTemplate.update(sql, contact, firstName, lastName, department, position, email,
 					passwordEncoder.encode(generatedString));
+			
 			messageRepository.sendSms(
-					generatedString
-							+ " is your Briefta VMS App login & verification PIN. Please keep it safe.\nThank you",
+												 "Your Briefta V-SMS PIN is "+generatedString+". Keep it safe.",
 					contact);
 			return rows;
 	

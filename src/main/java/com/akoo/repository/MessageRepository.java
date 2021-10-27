@@ -64,6 +64,7 @@ public class MessageRepository {
 	}*/
 
 	public String sendSms(String message,String contact) {
+		System.err.println("sendt");
 	return 	Unirest.get("https://apps.mnotify.net/smsapi").
 			queryString("key", smsApiKey).
 			queryString("to", contact).

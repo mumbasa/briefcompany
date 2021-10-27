@@ -40,8 +40,8 @@ public class Emailer {
     public void prepareAndSend(Appointment appointment) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-           // messageHelper.setFrom("Briefta Technologies");
-            messageHelper.setFrom("1infosapiens@gmail.com", "Briefta Technologies");
+         //   messageHelper.setFrom("brieftavms@gmail.com");
+         messageHelper.setFrom("brieftavms@gmail.com", "Briefta Technologies");
             System.out.println(appointment.getEmail());
             messageHelper.setTo(appointment.getEmail());
             messageHelper.setSubject("Appointment Decision");
@@ -51,6 +51,7 @@ public class Emailer {
         try {
             mailSender.send(messagePreparator);
         } catch (MailException e) {
+        	e.printStackTrace();
             // runtime exception; compiler will not force you to handle it
         }
     }
