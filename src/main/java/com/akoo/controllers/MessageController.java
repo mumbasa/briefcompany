@@ -23,9 +23,9 @@ public class MessageController {
  
 	
 	@RequestMapping(value = "/api/send/message", method = RequestMethod.POST)
-	public void sendMessage(@RequestParam(value = "message") String message, @RequestParam(value = "time") String time,
+	public int sendMessage(@RequestParam(value = "message") String message, @RequestParam(value = "time") String time,
 			@RequestParam(value = "staff") String staff, @RequestParam(value = "visitor") String visitor) {
-		messager.sendReceptionMsg(message);
+return		messager.sendReceptionMsg(message);
 
 	}
 	 
@@ -36,10 +36,10 @@ public class MessageController {
 
 	
 	@RequestMapping(value = "/api/send/frondesk/message", method = RequestMethod.GET)
-	public void sendFrontDeskMessage(@RequestParam("id") String id,@RequestParam("title") String title,@RequestParam("message") String message) {
+	public int sendFrontDeskMessage(@RequestParam("id") String id,@RequestParam("title") String title,@RequestParam("message") String message) {
 		Staff staff = staffRepository.getStaff(id);
 		messager.sendFrontDeskMessage(staff.getName()+";"+title+";"+ message+";"+System.currentTimeMillis());
-	
+		return 1;
 	}
 
 	

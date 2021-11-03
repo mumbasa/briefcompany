@@ -10,6 +10,7 @@ import com.akoo.data.Appointment;
 
 @Service
 public class MailContentBuilder {
+	
 	@Autowired
     private TemplateEngine templateEngine;
 	

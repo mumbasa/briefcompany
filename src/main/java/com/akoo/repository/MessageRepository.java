@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import com.akoo.data.StafMessage;
 import com.akoo.data.Visit;
 
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
 @Service
@@ -170,11 +168,11 @@ public class MessageRepository {
 
 	}
 
-	public void sendReceptionMsg(String message) {
-
+	public int sendReceptionMsg(String message) {
 		redisTemplate.opsForZSet().add("messages:"+env.getProperty("company"), message, (double) System.currentTimeMillis());
 		redisTemplate.convertAndSend("reception:"+env.getProperty("company"), message);
-
+		return 1;
+		
 	}
 
 	public void visitorAction(String staffId, String visitor, String message) {
