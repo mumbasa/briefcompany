@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -98,10 +99,31 @@ public class StaffController {
 	}
 	
 	
-	@RequestMapping("/api/get/staff/details/{id}/{pass}")
-	public ResponseEntity<Staff> getStaffss(@PathVariable(value="id") String id,@PathVariable(value="pass") String pass){
+	@GetMapping("/api/get/staff/details/{id}/{pass}")
+	public ResponseEntity<ResultResponse> getStaffss(@PathVariable(value="id") String id,@PathVariable(value="pass") String pass){
+		ResultResponse mess = new ResultResponse();
+		Staff staff = staffRepository.getStaffAuth(id,pass);
+		try {
+			if(staff !=null) {
+				mess.setPayload(staff);
+				mess.setStatusCode(1);
+				mess.setResponse("Login Successful");
+			}else {
+				mess.setStatusCode(0);
+				mess.setResponse("Login failed try again");
+							
+			}
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+
+			mess.setStatusCode(0);
+			mess.setResponse("Login failed try again");
+				
+		}
 		
-		return new ResponseEntity<Staff>(staffRepository.getStaffAuth(id,pass),HttpStatus.OK);
+		
+		return new ResponseEntity<ResultResponse>(mess,HttpStatus.OK);
 	}
 	@RequestMapping("/api/update/staff/{id}")
 	public ResponseEntity<ResultResponse> updateStaff(@PathVariable(name="id") String id,@RequestParam(value="dept") String dept,@RequestParam(value="lname") String lname,@RequestParam(value="fname") String fname){
