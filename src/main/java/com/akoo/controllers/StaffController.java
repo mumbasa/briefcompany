@@ -102,8 +102,9 @@ public class StaffController {
 	@GetMapping("/api/get/staff/details/{id}/{pass}")
 	public ResponseEntity<ResultResponse> getStaffss(@PathVariable(value="id") String id,@PathVariable(value="pass") String pass){
 		ResultResponse mess = new ResultResponse();
-		Staff staff = staffRepository.getStaffAuth(id,pass);
+		
 		try {
+			Staff staff = staffRepository.getStaffAuth(id,pass);
 			if(staff !=null) {
 				mess.setPayload(staff);
 				mess.setStatusCode(1);
